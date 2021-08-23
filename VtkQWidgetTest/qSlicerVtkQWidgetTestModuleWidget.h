@@ -39,7 +39,7 @@ public:
   virtual ~qSlicerVtkQWidgetTestModuleWidget();
 
 public slots:
-
+  void addHelloWorldClicked();
 
 protected:
   QScopedPointer<qSlicerVtkQWidgetTestModuleWidgetPrivate> d_ptr;
