@@ -22,6 +22,9 @@
 #include "qSlicerVtkQWidgetTestModuleWidget.h"
 #include "ui_qSlicerVtkQWidgetTestModuleWidget.h"
 
+#include "vtkSlicerQWidgetRepresentation.h"
+#include "vtkSlicerQWidgetWidget.h"
+
 // VTK includes
 #include "Testing/Cxx/TestQtCommon.h"
 #include "vtkPlaneSource.h"
@@ -242,11 +245,12 @@ void qSlicerVtkQWidgetTestModuleWidget::setup()
   d->setupUi(this);
   this->Superclass::setup();
 
-  QObject::connect(d->AddHelloWorldWidgetButton, SIGNAL(clicked()), this, SLOT(addHelloWorldClicked()));
+  QObject::connect(d->AddHelloWorldWidgetButton_VTK, SIGNAL(clicked()), this, SLOT(addHelloWorldVtkClicked()));
+  QObject::connect(d->AddHelloWorldWidgetButton_Slicer, SIGNAL(clicked()), this, SLOT(addHelloWorldSlicerClicked()));
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldClicked()
+void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldVtkClicked()
 {
   Q_D(qSlicerVtkQWidgetTestModuleWidget);
 
@@ -264,6 +268,47 @@ void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldClicked()
   window0->Render();
 
   vtkNew<vtkQWidgetWidget> widget;
+  widget->CreateDefaultRepresentation();
+  widget->GetQWidgetRepresentation()->GetPlaneSource()->SetPoint2(-0.5,0.5,-0.5);
+  widget->SetWidget( &hello );
+  widget->SetCurrentRenderer(renderer);
+  widget->SetInteractor(window0->GetInteractor());
+
+  widget->SetEnabled(1);
+  renderer->ResetCamera();
+  renderer->ResetCameraClippingRange();
+  window0->Render();
+  d->process_events_and_wait(100);
+  //vtktesting->SetRenderWindow(window0);
+  //renderer->ResetCamera();
+  //window0->Render();
+  //d->process_events_and_wait(100);
+  //window0->Render();
+
+  // clear the widget first, to avoid using it
+  // after it may have been freed.
+  widget->SetWidget(nullptr);
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldSlicerClicked()
+{
+  Q_D(qSlicerVtkQWidgetTestModuleWidget);
+
+  //QPushButton* hello = new QPushButton("Hello world!", this);
+  QPushButton hello( "Hello world!", 0 );
+
+  auto widgetOrWindow = d->create_widget_or_window(qSlicerVtkQWidgetTestModuleWidgetPrivate::Type::USE_QVTKRENDERWIDGET, nullptr);
+  vtkNew<vtkGenericOpenGLRenderWindow> window0;
+  vtkNew<vtkRenderer> renderer;
+  renderer->SetBackground(0.2, 0.3, 0.4);
+  window0->AddRenderer(renderer);
+  d->set_render_window(widgetOrWindow, window0);
+  d->show(widgetOrWindow, QSize(300, 300));
+  d->process_events_and_wait(100);
+  window0->Render();
+
+  vtkNew<vtkSlicerQWidgetWidget> widget;
   widget->CreateDefaultRepresentation();
   widget->GetQWidgetRepresentation()->GetPlaneSource()->SetPoint2(-0.5,0.5,-0.5);
   widget->SetWidget( &hello );
