@@ -25,6 +25,16 @@
 #include "vtkSlicerQWidgetRepresentation.h"
 #include "vtkSlicerQWidgetWidget.h"
 
+#include "qSlicerApplication.h"
+#include "qSlicerLayoutManager.h"
+
+// qMRMLWidget includes
+#include "qMRMLThreeDView.h"
+#include "qMRMLThreeDWidget.h"
+
+// MRML includes
+#include "vtkMRMLViewNode.h"
+
 // VTK includes
 #include "Testing/Cxx/TestQtCommon.h"
 #include "vtkPlaneSource.h"
@@ -298,6 +308,7 @@ void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldSlicerClicked()
   //QPushButton* hello = new QPushButton("Hello world!", this);
   QPushButton hello( "Hello world!", 0 );
 
+  /*
   auto widgetOrWindow = d->create_widget_or_window(qSlicerVtkQWidgetTestModuleWidgetPrivate::Type::USE_QVTKRENDERWIDGET, nullptr);
   vtkNew<vtkGenericOpenGLRenderWindow> window0;
   vtkNew<vtkRenderer> renderer;
@@ -329,4 +340,19 @@ void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldSlicerClicked()
   // clear the widget first, to avoid using it
   // after it may have been freed.
   widget->SetWidget(nullptr);
+  */
+
+  qSlicerApplication * app = qSlicerApplication::application();
+  if (!app || !app->layoutManager())
+  {
+    qCritical() << Q_FUNC_INFO << ": Failed to access layout manager";
+  }
+
+  vtkNew<vtkSlicerQWidgetWidget> widget;
+  widget->SetWidget( &hello );
+
+  qMRMLThreeDView* threeDView = app->layoutManager()->threeDWidget(0)->threeDView();
+  vtkRenderer* activeRenderer = app->layoutManager()->activeThreeDRenderer();
+  vtkMRMLViewNode* viewNode = threeDView->mrmlViewNode();
+  widget->CreateDefaultRepresentation(viewNode, activeRenderer);
 }

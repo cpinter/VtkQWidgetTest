@@ -63,13 +63,7 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
   this->PlaneActor->GetProperty()->SetDiffuse(0.0);
 
   // Define the point coordinates
-  double bounds[6];
-  bounds[0] = -0.5;
-  bounds[1] = 0.5;
-  bounds[2] = -0.5;
-  bounds[3] = 0.5;
-  bounds[4] = -0.5;
-  bounds[5] = 0.5;
+  double bounds[6] = {-50, 50, -50, 50, -50, 50 };
 
   // Initial creation of the widget, serves to initialize it
   this->PlaceWidget(bounds);
@@ -92,13 +86,15 @@ vtkSlicerQWidgetRepresentation::~vtkSlicerQWidgetRepresentation()
   this->Picker->Delete();
 }
 
+//------------------------------------------------------------------------------
 void vtkSlicerQWidgetRepresentation::SetWidget(QWidget* w)
 {
   // just pass down to the QWidgetTexture
   this->QWidgetTexture->SetWidget(w);
   this->Modified();
 }
-
+/*
+//------------------------------------------------------------------------------
 // see if the event hits the widget rep, if so set the WidgetCoordinates
 // and move to Inside state
 int vtkSlicerQWidgetRepresentation::ComputeComplexInteractionState(
@@ -156,11 +152,11 @@ int vtkSlicerQWidgetRepresentation::ComputeComplexInteractionState(
 
   return this->InteractionState;
 }
-
+*/
 //------------------------------------------------------------------------------
 double* vtkSlicerQWidgetRepresentation::GetBounds()
 {
-  this->BuildRepresentation();
+  //this->BuildRepresentation();
   return this->PlaneActor->GetBounds();
 }
 
@@ -224,7 +220,7 @@ void vtkSlicerQWidgetRepresentation::PlaceWidget(double bds[6])
   this->PlaneSource->SetPoint1(bds[1], bds[2], bds[4]);
   this->PlaneSource->SetPoint2(bds[0], bds[2], bds[5]);
 
-  this->ValidPick = 1; // since we have positioned the widget successfully
+  //this->ValidPick = 1; // since we have positioned the widget successfully
 }
 
 //------------------------------------------------------------------------------
@@ -232,7 +228,7 @@ vtkPolyDataAlgorithm* vtkSlicerQWidgetRepresentation::GetPolyDataAlgorithm()
 {
   return this->PlaneSource;
 }
-
+/*
 //------------------------------------------------------------------------------
 void vtkSlicerQWidgetRepresentation::UpdatePlacement() {}
 
@@ -241,7 +237,7 @@ void vtkSlicerQWidgetRepresentation::BuildRepresentation()
 {
   // rep is always built via plane source and doesn't change
 }
-
+*//*
 //------------------------------------------------------------------------------
 void vtkSlicerQWidgetRepresentation::RegisterPickers()
 {
@@ -252,3 +248,4 @@ void vtkSlicerQWidgetRepresentation::RegisterPickers()
   }
   pm->AddPicker(this->Picker, this);
 }
+*/

@@ -109,7 +109,7 @@ void vtkSlicerQWidgetTexture::ReleaseGraphicsResources(vtkWindow* win)
   this->Framebuffer = nullptr;
 }
 
-// just hold onto the widget until opengl context is active
+//------------------------------------------------------------------------------
 void vtkSlicerQWidgetTexture::SetWidget(QWidget* w)
 {
   if (this->Widget == w)
@@ -127,7 +127,7 @@ void vtkSlicerQWidgetTexture::SetWidget(QWidget* w)
   this->Modified();
 }
 
-// handle any setup required, only call when OpenGL context is active
+//------------------------------------------------------------------------------
 void vtkSlicerQWidgetTexture::AllocateFromWidget()
 {
   if (this->OffscreenSurface && this->Framebuffer)
@@ -172,6 +172,7 @@ void vtkSlicerQWidgetTexture::AllocateFromWidget()
   state->Pop();
 }
 
+//------------------------------------------------------------------------------
 void vtkSlicerQWidgetTexture::Activate()
 {
   // make sure everything is setup in Qt and the texture is created

@@ -39,7 +39,6 @@
 #include "vtkRenderWindow.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkRenderer.h"
-//#include "vtkStdString.h"
 #include "vtkWidgetCallbackMapper.h"
 #include "vtkWidgetEvent.h"
 #include "vtkWidgetEventTranslator.h"
@@ -50,8 +49,8 @@ vtkStandardNewMacro(vtkSlicerQWidgetWidget);
 vtkSlicerQWidgetWidget::vtkSlicerQWidgetWidget()
 {
   this->Widget = nullptr;
-  this->WidgetState = vtkSlicerQWidgetWidget::Start;
-
+  //this->WidgetState = vtkSlicerQWidgetWidget::Start;
+  /*
   {
     vtkNew<vtkEventDataButton3D> ed;
     ed->SetDevice(vtkEventDataDevice::RightController);
@@ -76,16 +75,19 @@ vtkSlicerQWidgetWidget::vtkSlicerQWidgetWidget()
     this->CallbackMapper->SetCallbackMethod(
       vtkCommand::Move3DEvent, ed, vtkWidgetEvent::Move3D, this, vtkSlicerQWidgetWidget::MoveAction3D);
   }
+  }*/
 }
 
 //------------------------------------------------------------------------------
 vtkSlicerQWidgetWidget::~vtkSlicerQWidgetWidget() = default;
 
+//------------------------------------------------------------------------------
 vtkSlicerQWidgetRepresentation* vtkSlicerQWidgetWidget::GetQWidgetRepresentation()
 {
   return vtkSlicerQWidgetRepresentation::SafeDownCast(this->WidgetRep);
 }
 
+//------------------------------------------------------------------------------
 void vtkSlicerQWidgetWidget::SetWidget(QWidget* w)
 {
   if (this->Widget == w)
@@ -100,7 +102,7 @@ void vtkSlicerQWidgetWidget::SetWidget(QWidget* w)
   }
   this->Modified();
 }
-
+/*
 //------------------------------------------------------------------------------
 void vtkSlicerQWidgetWidget::SelectAction3D(vtkAbstractWidget* w)
 {
@@ -265,7 +267,7 @@ void vtkSlicerQWidgetWidget::EndSelectAction3D(vtkAbstractWidget* w)
   self->EndInteraction();
   self->InvokeEvent(vtkCommand::EndInteractionEvent, nullptr);
 }
-
+*//*
 //------------------------------------------------------------------------------
 void vtkSlicerQWidgetWidget::SetEnabled(int enabling)
 {
@@ -280,7 +282,7 @@ void vtkSlicerQWidgetWidget::SetEnabled(int enabling)
   }
   Superclass::SetEnabled(enabling);
 }
-
+*//*
 //------------------------------------------------------------------------------
 void vtkSlicerQWidgetWidget::CreateDefaultRepresentation()
 {
@@ -290,12 +292,33 @@ void vtkSlicerQWidgetWidget::CreateDefaultRepresentation()
     this->GetQWidgetRepresentation()->SetWidget(this->Widget);
   }
 }
+*/
+
+//----------------------------------------------------------------------
+void vtkSlicerQWidgetWidget::CreateDefaultRepresentation(vtkMRMLAbstractViewNode* viewNode, vtkRenderer* renderer)
+{
+  vtkNew<vtkSlicerQWidgetRepresentation> rep;
+  this->SetRenderer(renderer);
+  this->SetRepresentation(rep);
+  rep->SetWidget(this->Widget);
+  rep->SetViewNode(viewNode);
+  rep->UpdateFromMRML(nullptr, 0); // full update
+}
 
 //------------------------------------------------------------------------------
-void vtkSlicerQWidgetWidget::SetRepresentation(vtkSlicerQWidgetRepresentation* rep)
+void vtkSlicerQWidgetWidget::SetRepresentation(vtkMRMLAbstractWidgetRepresentation* rep)
 {
-  this->Superclass::SetWidgetRepresentation(reinterpret_cast<vtkWidgetRepresentation*>(rep));
-  rep->SetWidget(this->Widget);
+  this->Superclass::SetRepresentation(rep);
+
+  vtkSlicerQWidgetRepresentation* qWidgetRep = vtkSlicerQWidgetRepresentation::SafeDownCast(rep);
+  if (qWidgetRep)
+  {
+    qWidgetRep->SetWidget(this->Widget);
+  }
+  else
+  {
+    vtkErrorMacro("SetRepresentation: Given representation is not a vtkSlicerQWidgetRepresentation");
+  }
 }
 
 //------------------------------------------------------------------------------

@@ -49,7 +49,8 @@ public:
 
   ///@{
   /**
-   * Set/Get the QWidget that this TextureObject will render/use
+   * Set/Get the QWidget that this TextureObject will render/use.
+   * Just hold onto the widget until opengl context is active.
    */
   void SetWidget(QWidget* w);
   QWidget* GetWidget() { return this->Widget; }
@@ -62,7 +63,7 @@ public:
   QGraphicsScene* GetScene() { return this->Scene; }
 
   /**
-   * Activate and Bind the texture. Ovrloaded to handle the opengl related
+   * Activate and Bind the texture. Overloaded to handle the opengl related
    * setup at the same time. as We know the context will be active then.
    */
   void Activate() override;
@@ -81,10 +82,11 @@ protected:
   QOpenGLFramebufferObject* Framebuffer;
   QWidget* Widget;
 
-  // method called when the widget needs repainting
+  /// method called when the widget needs repainting
   std::function<void()> RedrawMethod;
 
-  // internal method to setup the scene/framebuffer/etc
+  /// internal method to setup the scene/framebuffer/etc.
+  /// handle any setup required, only call when OpenGL context is active.
   void AllocateFromWidget();
 
 private:

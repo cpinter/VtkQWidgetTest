@@ -35,7 +35,7 @@
 
 #include "vtkSlicerVtkQWidgetTestModuleVTKWidgetsExport.h"
 
-#include "vtkWidgetRepresentation.h"
+#include "vtkMRMLAbstractWidgetRepresentation.h"
 
 class QWidget;
 class vtkActor;
@@ -46,7 +46,7 @@ class vtkPolyDataAlgorithm;
 class vtkPolyDataMapper;
 class vtkSlicerQWidgetTexture;
 
-class VTK_SLICER_VTKQWIDGETTEST_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetRepresentation : public vtkWidgetRepresentation
+class VTK_SLICER_VTKQWIDGETTEST_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetRepresentation : public vtkMRMLAbstractWidgetRepresentation
 {
 public:
   /**
@@ -58,7 +58,7 @@ public:
   /**
    * Standard methods for the class.
    */
-  vtkTypeMacro(vtkSlicerQWidgetRepresentation, vtkWidgetRepresentation);
+  vtkTypeMacro(vtkSlicerQWidgetRepresentation, vtkMRMLAbstractWidgetRepresentation);
   void PrintSelf(ostream& os, vtkIndent indent) override;
   ///@}
 
@@ -72,16 +72,19 @@ public:
    * Satisfies the superclass API.  This will change the state of the widget
    * to match changes that have been made to the underlying PolyDataSource
    */
-  void UpdatePlacement(void);
+  //void UpdatePlacement(void);
+
+  /// TODO:
+  void PlaceWidget(double bounds[6]);
 
   ///@{
   /**
    * Methods to interface with the vtkImplicitPlaneWidget2.
    */
-  void PlaceWidget(double bounds[6]) override;
-  void BuildRepresentation() override;
-  int ComputeComplexInteractionState(vtkRenderWindowInteractor* iren, vtkAbstractWidget* widget,
-    unsigned long event, void* calldata, int modify = 0) override;
+  //void PlaceWidget(double bounds[6]) override;
+  //void BuildRepresentation() override;
+  //int ComputeComplexInteractionState(vtkRenderWindowInteractor* iren, vtkAbstractWidget* widget,
+  //  unsigned long event, void* calldata, int modify = 0) override;
   ///@}
 
   ///@{
@@ -113,7 +116,7 @@ public:
    * geometric considerations (i.e., cursor near a widget feature), then
    * based on events, the widget may modify this further.
    */
-  vtkSetClampMacro(InteractionState, int, Outside, Inside);
+  //vtkSetClampMacro(InteractionState, int, Outside, Inside);
   ///@}
 
   /**
@@ -153,7 +156,7 @@ protected:
   vtkCellPicker* Picker;
 
   // Register internal Pickers within PickingManager
-  void RegisterPickers() override;
+  //void RegisterPickers() override;
 
 private:
   vtkSlicerQWidgetRepresentation(const vtkSlicerQWidgetRepresentation&) = delete;

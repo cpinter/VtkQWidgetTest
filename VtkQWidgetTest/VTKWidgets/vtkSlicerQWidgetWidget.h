@@ -35,13 +35,14 @@
 
 #include "vtkSlicerVtkQWidgetTestModuleVTKWidgetsExport.h"
 
-#include "vtkAbstractWidget.h"
+#include "vtkMRMLAbstractWidget.h"
+
 #include <QPointF>                 // for ivar
 
 class QWidget;
 class vtkSlicerQWidgetRepresentation;
 
-class VTK_SLICER_VTKQWIDGETTEST_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetWidget : public vtkAbstractWidget
+class VTK_SLICER_VTKQWIDGETTEST_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetWidget : public vtkMRMLAbstractWidget
 {
   friend class vtkInteractionCallback;
 
@@ -55,7 +56,7 @@ public:
   /**
    * Standard vtkObject methods
    */
-  vtkTypeMacro(vtkSlicerQWidgetWidget, vtkAbstractWidget);
+  vtkTypeMacro(vtkSlicerQWidgetWidget, vtkMRMLAbstractWidget);
   void PrintSelf(ostream& os, vtkIndent indent) override;
   ///@}
 
@@ -64,12 +65,12 @@ public:
    * widget in the scene. Note that the representation is a subclass of vtkProp
    * so it can be added to the renderer independent of the widget.
    */
-  void SetRepresentation(vtkSlicerQWidgetRepresentation* rep);
+  void SetRepresentation(vtkMRMLAbstractWidgetRepresentation *r) override;
 
   // Description:
   // Disable/Enable the widget if needed.
   // Unobserved the camera if the widget is disabled.
-  void SetEnabled(int enabling) override;
+  //void SetEnabled(int enabling) override;
 
   /**
    * Return the representation as a vtkSlicerQWidgetRepresentation
@@ -79,7 +80,10 @@ public:
   /**
    * Create the default widget representation if one is not set.
    */
-  void CreateDefaultRepresentation() override;
+  //void CreateDefaultRepresentation();
+
+  /// Create the default widget representation and initializes the widget and representation.
+  void CreateDefaultRepresentation(vtkMRMLAbstractViewNode* viewNode, vtkRenderer* renderer);
 
   /**
    * Set the QWidget that will receive the events.
@@ -89,7 +93,7 @@ public:
 protected:
   vtkSlicerQWidgetWidget();
   ~vtkSlicerQWidgetWidget() override;
-
+  /*
   // Manage the state of the widget
   int WidgetState;
   enum _WidgetState
@@ -97,14 +101,14 @@ protected:
     Start = 0,
     Active
   };
-
+  */
   QWidget* Widget;
   QPointF LastWidgetCoordinates;
 
   // These methods handle events
-  static void SelectAction3D(vtkAbstractWidget*);
-  static void EndSelectAction3D(vtkAbstractWidget*);
-  static void MoveAction3D(vtkAbstractWidget*);
+  //static void SelectAction3D(vtkAbstractWidget*);
+  //static void EndSelectAction3D(vtkAbstractWidget*);
+  //static void MoveAction3D(vtkAbstractWidget*);
 
 private:
   vtkSlicerQWidgetWidget(const vtkSlicerQWidgetWidget&) = delete;
