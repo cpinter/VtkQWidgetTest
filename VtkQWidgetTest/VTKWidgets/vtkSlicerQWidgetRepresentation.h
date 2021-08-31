@@ -62,11 +62,16 @@ public:
   void PrintSelf(ostream& os, vtkIndent indent) override;
   ///@}
 
+  /// Subclasses of vtkMRMLAbstractWidgetRepresentation must implement these methods. These
+  /// are the methods that the widget and its representation use to
+  /// communicate with each other.
+  void UpdateFromMRML(vtkMRMLNode* caller, unsigned long event, void *callData=nullptr) override;
+
   /**
    * Satisfies superclass API.  This returns a pointer to the underlying
    * PolyData (which represents the plane).
    */
-  vtkPolyDataAlgorithm* GetPolyDataAlgorithm();
+  //vtkPolyDataAlgorithm* GetPolyDataAlgorithm();
 
   /**
    * Satisfies the superclass API.  This will change the state of the widget

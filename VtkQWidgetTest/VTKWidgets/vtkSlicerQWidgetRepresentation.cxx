@@ -58,7 +58,7 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
 
   this->PlaneActor = vtkActor::New();
   this->PlaneActor->SetMapper(this->PlaneMapper);
-  this->PlaneActor->SetTexture(this->PlaneTexture);
+  //this->PlaneActor->SetTexture(this->PlaneTexture); //TODO:
   this->PlaneActor->GetProperty()->SetAmbient(1.0);
   this->PlaneActor->GetProperty()->SetDiffuse(0.0);
 
@@ -67,11 +67,12 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
 
   // Initial creation of the widget, serves to initialize it
   this->PlaceWidget(bounds);
-
+  /*
   this->Picker = vtkCellPicker::New();
   this->Picker->SetTolerance(0.005);
   this->Picker->AddPickList(this->PlaneActor);
   this->Picker->PickFromListOn();
+  */
 }
 
 //------------------------------------------------------------------------------
@@ -83,7 +84,7 @@ vtkSlicerQWidgetRepresentation::~vtkSlicerQWidgetRepresentation()
   this->PlaneTexture->Delete();
   this->QWidgetTexture->Delete();
 
-  this->Picker->Delete();
+  //this->Picker->Delete();
 }
 
 //------------------------------------------------------------------------------
@@ -163,12 +164,14 @@ double* vtkSlicerQWidgetRepresentation::GetBounds()
 //------------------------------------------------------------------------------
 void vtkSlicerQWidgetRepresentation::GetActors(vtkPropCollection* pc)
 {
+  this->Superclass::GetActors(pc);
   this->PlaneActor->GetActors(pc);
 }
 
 //------------------------------------------------------------------------------
 void vtkSlicerQWidgetRepresentation::ReleaseGraphicsResources(vtkWindow* w)
 {
+  this->Superclass::ReleaseGraphicsResources(w);
   this->PlaneActor->ReleaseGraphicsResources(w);
   this->PlaneMapper->ReleaseGraphicsResources(w);
   this->PlaneTexture->ReleaseGraphicsResources(w);
@@ -177,30 +180,52 @@ void vtkSlicerQWidgetRepresentation::ReleaseGraphicsResources(vtkWindow* w)
 //------------------------------------------------------------------------------
 int vtkSlicerQWidgetRepresentation::RenderOpaqueGeometry(vtkViewport* v)
 {
-  vtkInformation* info = this->GetPropertyKeys();
-  this->PlaneActor->SetPropertyKeys(info);
+  int count=0;
+  count = this->Superclass::RenderOpaqueGeometry(v);
 
-  vtkOpenGLRenderWindow* renWin =
-    static_cast<vtkOpenGLRenderWindow*>(this->Renderer->GetRenderWindow());
-  vtkOpenGLState* ostate = renWin->GetState();
+  if (this->PlaneActor->GetVisibility())
+  {
+    this->PlaneActor->SetPropertyKeys(this->GetPropertyKeys());
 
-  // always draw over the rest
-  ostate->vtkglDepthFunc(GL_ALWAYS);
-  int result = this->PlaneActor->RenderOpaqueGeometry(v);
-  ostate->vtkglDepthFunc(GL_LEQUAL);
+    vtkOpenGLRenderWindow* renWin = static_cast<vtkOpenGLRenderWindow*>(this->Renderer->GetRenderWindow());
+    vtkOpenGLState* ostate = renWin->GetState();
 
-  return result;
+    // always draw over the rest
+    //ostate->vtkglDepthFunc(GL_ALWAYS); //TODO:
+    count += this->PlaneActor->RenderOpaqueGeometry(v);
+    //ostate->vtkglDepthFunc(GL_LEQUAL); //TODO:
+  }
+
+  return count;
 }
 
 //------------------------------------------------------------------------------
-int vtkSlicerQWidgetRepresentation::RenderTranslucentPolygonalGeometry(vtkViewport*)
+int vtkSlicerQWidgetRepresentation::RenderTranslucentPolygonalGeometry(vtkViewport* viewport)
 {
-  return 0;
+  int count=0;
+  count = this->Superclass::RenderTranslucentPolygonalGeometry(viewport);
+  if (this->PlaneActor->GetVisibility())
+  {
+    // The internal actor needs to share property keys.
+    // This ensures the mapper state is consistent and allows depth peeling to work as expected.
+    this->PlaneActor->SetPropertyKeys(this->GetPropertyKeys());
+
+    count += this->PlaneActor->RenderTranslucentPolygonalGeometry(viewport);
+  }
+  return count;
 }
 
 //------------------------------------------------------------------------------
 vtkTypeBool vtkSlicerQWidgetRepresentation::HasTranslucentPolygonalGeometry()
 {
+  if (this->Superclass::HasTranslucentPolygonalGeometry())
+  {
+    return true;
+  }
+  if (this->PlaneActor->GetVisibility() && this->PlaneActor->HasTranslucentPolygonalGeometry())
+  {
+    return true;
+  }
   return false;
 }
 
@@ -222,13 +247,13 @@ void vtkSlicerQWidgetRepresentation::PlaceWidget(double bds[6])
 
   //this->ValidPick = 1; // since we have positioned the widget successfully
 }
-
+/*
 //------------------------------------------------------------------------------
 vtkPolyDataAlgorithm* vtkSlicerQWidgetRepresentation::GetPolyDataAlgorithm()
 {
   return this->PlaneSource;
 }
-/*
+*//*
 //------------------------------------------------------------------------------
 void vtkSlicerQWidgetRepresentation::UpdatePlacement() {}
 
@@ -249,3 +274,21 @@ void vtkSlicerQWidgetRepresentation::RegisterPickers()
   pm->AddPicker(this->Picker, this);
 }
 */
+
+//----------------------------------------------------------------------
+void vtkSlicerQWidgetRepresentation::UpdateFromMRML(vtkMRMLNode* caller, unsigned long event, void *callData /*=nullptr*/)
+{
+  Superclass::UpdateFromMRML(caller, event, callData);
+
+  this->NeedToRenderOn();
+
+  if (!this->QWidgetTexture->GetWidget() || !this->ViewNode)
+    {
+    this->VisibilityOff();
+    this->PlaneActor->SetVisibility(false);
+    return;
+    }
+
+  this->VisibilityOn();
+  this->PlaneActor->SetVisibility(true);
+}

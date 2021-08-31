@@ -23,6 +23,11 @@
 
 #include "qSlicerVtkQWidgetTestModuleExport.h"
 
+#include "vtkSlicerQWidgetWidget.h"
+
+// VTK includes
+#include <vtkSmartPointer.h>
+
 class qSlicerVtkQWidgetTestModuleWidgetPrivate;
 class vtkMRMLNode;
 
@@ -46,6 +51,10 @@ protected:
   QScopedPointer<qSlicerVtkQWidgetTestModuleWidgetPrivate> d_ptr;
 
   virtual void setup();
+
+protected:
+  vtkSmartPointer<vtkSlicerQWidgetWidget> SlicerQWidgetWidget;
+  QWidget* Widget;
 
 private:
   Q_DECLARE_PRIVATE(qSlicerVtkQWidgetTestModuleWidget);
