@@ -67,30 +67,8 @@ public:
   /// communicate with each other.
   void UpdateFromMRML(vtkMRMLNode* caller, unsigned long event, void *callData=nullptr) override;
 
-  /**
-   * Satisfies superclass API.  This returns a pointer to the underlying
-   * PolyData (which represents the plane).
-   */
-  //vtkPolyDataAlgorithm* GetPolyDataAlgorithm();
-
-  /**
-   * Satisfies the superclass API.  This will change the state of the widget
-   * to match changes that have been made to the underlying PolyDataSource
-   */
-  //void UpdatePlacement(void);
-
   /// TODO:
   void PlaceWidget(double bounds[6]);
-
-  ///@{
-  /**
-   * Methods to interface with the vtkImplicitPlaneWidget2.
-   */
-  //void PlaceWidget(double bounds[6]) override;
-  //void BuildRepresentation() override;
-  //int ComputeComplexInteractionState(vtkRenderWindowInteractor* iren, vtkAbstractWidget* widget,
-  //  unsigned long event, void* calldata, int modify = 0) override;
-  ///@}
 
   ///@{
   /**
@@ -110,19 +88,6 @@ public:
     Outside = 0,
     Inside
   };
-
-  ///@{
-  /**
-   * The interaction state may be set from a widget (e.g.,
-   * vtkSlicerQWidgetWidget) or other object. This controls how the
-   * interaction with the widget proceeds. Normally this method is used as
-   * part of a handshaking process with the widget: First
-   * ComputeInteractionState() is invoked that returns a state based on
-   * geometric considerations (i.e., cursor near a widget feature), then
-   * based on events, the widget may modify this further.
-   */
-  //vtkSetClampMacro(InteractionState, int, Outside, Inside);
-  ///@}
 
   /**
    * Set the QWidget this representation will render
@@ -157,11 +122,6 @@ protected:
   vtkActor* PlaneActor;
   vtkOpenGLTexture* PlaneTexture;
   vtkSlicerQWidgetTexture* QWidgetTexture;
-
-  vtkCellPicker* Picker;
-
-  // Register internal Pickers within PickingManager
-  //void RegisterPickers() override;
 
 private:
   vtkSlicerQWidgetRepresentation(const vtkSlicerQWidgetRepresentation&) = delete;

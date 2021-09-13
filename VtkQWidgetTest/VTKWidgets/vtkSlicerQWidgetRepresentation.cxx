@@ -39,7 +39,15 @@
 #include "vtkVectorOperators.h"
 #include <QtWidgets/QWidget>
 
-#include "vtk_glew.h"
+//TODO!!!!!!!
+#include <vtkImageAppend.h>
+#include <vtkImageData.h>
+#include <vtkSmartPointer.h>
+#include <vtkTexture.h>
+#include <vtkTrivialProducer.h>
+#include <QImage>
+#include "qMRMLUtils.h"
+
 
 vtkStandardNewMacro(vtkSlicerQWidgetRepresentation);
 
@@ -53,12 +61,24 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
   this->PlaneMapper->SetInputConnection(this->PlaneSource->GetOutputPort());
 
   this->QWidgetTexture = vtkSlicerQWidgetTexture::New();
-  this->PlaneTexture = vtkOpenGLTexture::New();
-  this->PlaneTexture->SetTextureObject(this->QWidgetTexture);
 
   this->PlaneActor = vtkActor::New();
   this->PlaneActor->SetMapper(this->PlaneMapper);
-  //this->PlaneActor->SetTexture(this->PlaneTexture); //TODO:
+  //this->PlaneActor->SetTexture(this->QWidgetTexture); //TODO:
+
+
+//TODO!!!!!!!
+  //vtkNew<vtkTexture> texture; //TODO: WORKS
+  vtkNew<vtkSlicerQWidgetTexture> texture; //TODO: CRASHES
+  QImage grabImage("d:/_download/20210818_DosePlotXavier.png");
+  vtkNew<vtkImageData> textureImage;
+  qMRMLUtils::qImageToVtkImageData(grabImage, textureImage);
+  vtkNew<vtkImageAppend> append;
+  append->SetInputDataObject(textureImage);
+  texture->SetInputConnection(append->GetOutputPort());
+  this->PlaneActor->SetTexture(texture);
+
+
   this->PlaneActor->GetProperty()->SetAmbient(1.0);
   this->PlaneActor->GetProperty()->SetDiffuse(0.0);
 
@@ -67,12 +87,6 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
 
   // Initial creation of the widget, serves to initialize it
   this->PlaceWidget(bounds);
-  /*
-  this->Picker = vtkCellPicker::New();
-  this->Picker->SetTolerance(0.005);
-  this->Picker->AddPickList(this->PlaneActor);
-  this->Picker->PickFromListOn();
-  */
 }
 
 //------------------------------------------------------------------------------
@@ -81,79 +95,17 @@ vtkSlicerQWidgetRepresentation::~vtkSlicerQWidgetRepresentation()
   this->PlaneSource->Delete();
   this->PlaneMapper->Delete();
   this->PlaneActor->Delete();
-  this->PlaneTexture->Delete();
   this->QWidgetTexture->Delete();
-
-  //this->Picker->Delete();
 }
 
 //------------------------------------------------------------------------------
 void vtkSlicerQWidgetRepresentation::SetWidget(QWidget* w)
 {
   // just pass down to the QWidgetTexture
-  this->QWidgetTexture->SetWidget(w);
+  //this->QWidgetTexture->SetWidget(w); //TODO:!!!!!!
   this->Modified();
 }
-/*
-//------------------------------------------------------------------------------
-// see if the event hits the widget rep, if so set the WidgetCoordinates
-// and move to Inside state
-int vtkSlicerQWidgetRepresentation::ComputeComplexInteractionState(
-  vtkRenderWindowInteractor*, vtkAbstractWidget*, unsigned long, void* calldata, int)
-{
-  vtkEventData* edata = static_cast<vtkEventData*>(calldata);
-  vtkEventDataDevice3D* edd = edata->GetAsEventDataDevice3D();
-  if (edd)
-  {
-    // compute intersection point using math, faster better
-    vtkVector3d origin;
-    this->PlaneSource->GetOrigin(origin.GetData());
-    vtkVector3d axis0;
-    this->PlaneSource->GetPoint1(axis0.GetData());
-    vtkVector3d axis1;
-    this->PlaneSource->GetPoint2(axis1.GetData());
 
-    axis0 = axis0 - origin;
-    axis1 = axis1 - origin;
-
-    vtkVector3d rpos;
-    edd->GetWorldPosition(rpos.GetData());
-    rpos = rpos - origin;
-
-    vtkVector3d rdir;
-    edd->GetWorldDirection(rdir.GetData());
-
-    double lengtha0 = vtkMath::Normalize(axis0.GetData());
-    double lengtha1 = vtkMath::Normalize(axis1.GetData());
-
-    vtkVector3d pnorm;
-    pnorm = axis0.Cross(axis1);
-    pnorm.Normalize();
-    double dist = rpos.Dot(pnorm) / rdir.Dot(pnorm);
-    rpos = rpos - rdir * dist;
-    double wCoords[2] = { 0.0, 0.0 };
-    wCoords[0] = rpos.Dot(axis0) / lengtha0;
-    wCoords[1] = rpos.Dot(axis1) / lengtha1;
-
-    if (wCoords[0] < 0.0 || wCoords[0] > 1.0 || wCoords[1] < 0.0 || wCoords[1] > 1.0)
-    {
-      this->InteractionState = vtkSlicerQWidgetRepresentation::Outside;
-      return this->InteractionState;
-    }
-
-    // the ray hit the widget
-    this->ValidPick = 1;
-    this->InteractionState = vtkSlicerQWidgetRepresentation::Inside;
-
-    QWidget* widget = this->QWidgetTexture->GetWidget();
-    this->WidgetCoordinates[0] = wCoords[0] * widget->width();
-    this->WidgetCoordinates[1] = wCoords[1] * widget->height();
-    this->WidgetCoordinates[1] = widget->height() - this->WidgetCoordinates[1];
-  }
-
-  return this->InteractionState;
-}
-*/
 //------------------------------------------------------------------------------
 double* vtkSlicerQWidgetRepresentation::GetBounds()
 {
@@ -174,26 +126,19 @@ void vtkSlicerQWidgetRepresentation::ReleaseGraphicsResources(vtkWindow* w)
   this->Superclass::ReleaseGraphicsResources(w);
   this->PlaneActor->ReleaseGraphicsResources(w);
   this->PlaneMapper->ReleaseGraphicsResources(w);
-  this->PlaneTexture->ReleaseGraphicsResources(w);
+  //this->PlaneTexture->ReleaseGraphicsResources(w);
 }
 
 //------------------------------------------------------------------------------
 int vtkSlicerQWidgetRepresentation::RenderOpaqueGeometry(vtkViewport* v)
 {
-  int count=0;
-  count = this->Superclass::RenderOpaqueGeometry(v);
+  int count = this->Superclass::RenderOpaqueGeometry(v);
 
   if (this->PlaneActor->GetVisibility())
   {
-    this->PlaneActor->SetPropertyKeys(this->GetPropertyKeys());
+    //this->PlaneActor->SetPropertyKeys(this->GetPropertyKeys());
 
-    vtkOpenGLRenderWindow* renWin = static_cast<vtkOpenGLRenderWindow*>(this->Renderer->GetRenderWindow());
-    vtkOpenGLState* ostate = renWin->GetState();
-
-    // always draw over the rest
-    //ostate->vtkglDepthFunc(GL_ALWAYS); //TODO:
     count += this->PlaneActor->RenderOpaqueGeometry(v);
-    //ostate->vtkglDepthFunc(GL_LEQUAL); //TODO:
   }
 
   return count;
@@ -244,36 +189,7 @@ void vtkSlicerQWidgetRepresentation::PlaceWidget(double bds[6])
   this->PlaneSource->SetOrigin(bds[0], bds[2], bds[4]);
   this->PlaneSource->SetPoint1(bds[1], bds[2], bds[4]);
   this->PlaneSource->SetPoint2(bds[0], bds[2], bds[5]);
-
-  //this->ValidPick = 1; // since we have positioned the widget successfully
 }
-/*
-//------------------------------------------------------------------------------
-vtkPolyDataAlgorithm* vtkSlicerQWidgetRepresentation::GetPolyDataAlgorithm()
-{
-  return this->PlaneSource;
-}
-*//*
-//------------------------------------------------------------------------------
-void vtkSlicerQWidgetRepresentation::UpdatePlacement() {}
-
-//------------------------------------------------------------------------------
-void vtkSlicerQWidgetRepresentation::BuildRepresentation()
-{
-  // rep is always built via plane source and doesn't change
-}
-*//*
-//------------------------------------------------------------------------------
-void vtkSlicerQWidgetRepresentation::RegisterPickers()
-{
-  vtkPickingManager* pm = this->GetPickingManager();
-  if (!pm)
-  {
-    return;
-  }
-  pm->AddPicker(this->Picker, this);
-}
-*/
 
 //----------------------------------------------------------------------
 void vtkSlicerQWidgetRepresentation::UpdateFromMRML(vtkMRMLNode* caller, unsigned long event, void *callData /*=nullptr*/)
@@ -282,12 +198,13 @@ void vtkSlicerQWidgetRepresentation::UpdateFromMRML(vtkMRMLNode* caller, unsigne
 
   this->NeedToRenderOn();
 
-  if (!this->QWidgetTexture->GetWidget() || !this->ViewNode)
-    {
-    this->VisibilityOff();
-    this->PlaneActor->SetVisibility(false);
-    return;
-    }
+//TODO:!!!!!!!!!
+  //if (!this->QWidgetTexture->GetWidget() || !this->ViewNode)
+  //  {
+  //  this->VisibilityOff();
+  //  this->PlaneActor->SetVisibility(false);
+  //  return;
+  //  }
 
   this->VisibilityOn();
   this->PlaneActor->SetVisibility(true);

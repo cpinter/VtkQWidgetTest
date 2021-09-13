@@ -25,12 +25,16 @@
 
 #include "vtkSlicerVtkQWidgetTestModuleVTKWidgetsExport.h"
 
-#include "vtkTextureObject.h"
+// VTK includes
+#include <vtkImageData.h>
+#include <vtkSmartPointer.h>
+#include <vtkTexture.h>
+#include <vtkTrivialProducer.h>
+
 #include <functional> // for ivar
 
 class QGraphicsScene;
-class QOffscreenSurface;
-class QOpenGLFramebufferObject;
+class QImage;
 class QWidget;
 
 /**
@@ -40,11 +44,11 @@ class QWidget;
  * This class works by rendering the QWidget into a Framebuffer
  * and then sending the OpenGL texture handle to VTK for rendering.
  */
-class VTK_SLICER_VTKQWIDGETTEST_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetTexture : public vtkTextureObject
+class VTK_SLICER_VTKQWIDGETTEST_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetTexture : public vtkTexture
 {
 public:
   static vtkSlicerQWidgetTexture* New();
-  vtkTypeMacro(vtkSlicerQWidgetTexture, vtkTextureObject);
+  vtkTypeMacro(vtkSlicerQWidgetTexture, vtkTexture);
   void PrintSelf(ostream& os, vtkIndent indent) override;
 
   ///@{
@@ -63,12 +67,6 @@ public:
   QGraphicsScene* GetScene() { return this->Scene; }
 
   /**
-   * Activate and Bind the texture. Overloaded to handle the opengl related
-   * setup at the same time. as We know the context will be active then.
-   */
-  void Activate() override;
-
-  /**
    * Free resources
    */
   void ReleaseGraphicsResources(vtkWindow* win) override;
@@ -78,12 +76,13 @@ protected:
   ~vtkSlicerQWidgetTexture() override;
 
   QGraphicsScene* Scene;
-  QOffscreenSurface* OffscreenSurface;
-  QOpenGLFramebufferObject* Framebuffer;
   QWidget* Widget;
 
+  vtkSmartPointer<vtkImageData> TextureImageData;
+  vtkSmartPointer<vtkTrivialProducer> TextureTrivialProducer;
+
   /// method called when the widget needs repainting
-  std::function<void()> RedrawMethod;
+  std::function<void()> UpdateTextureMethod;
 
   /// internal method to setup the scene/framebuffer/etc.
   /// handle any setup required, only call when OpenGL context is active.
