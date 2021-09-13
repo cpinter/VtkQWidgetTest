@@ -66,7 +66,6 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
   this->PlaneActor->SetMapper(this->PlaneMapper);
   //this->PlaneActor->SetTexture(this->QWidgetTexture); //TODO:
 
-
 //TODO!!!!!!!
   //vtkNew<vtkTexture> texture; //TODO: WORKS
   vtkNew<vtkSlicerQWidgetTexture> texture; //TODO: CRASHES
