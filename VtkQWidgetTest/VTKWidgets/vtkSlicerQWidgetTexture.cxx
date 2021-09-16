@@ -57,20 +57,11 @@ vtkSlicerQWidgetTexture::vtkSlicerQWidgetTexture()
     {
       return;
     }
-    //QImage grabImage(this->Widget->grab().toImage()); //TODO:
-    QImage grabImage("d:/_download/20210818_DosePlotXavier.png");
-    //qSlicerCoreApplication* app = qSlicerCoreApplication::application();
-    //QString grabImageFilePath = QString("%1/vtkSlicerQWidgetTextureImage.png").arg(app->temporaryPath());
+    QImage grabImage(this->Widget->grab().toImage());
+    qSlicerCoreApplication* app = qSlicerCoreApplication::application();
+    QString grabImageFilePath = QString("%1/vtkSlicerQWidgetTextureImage.png").arg(app->temporaryPath());
     qMRMLUtils::qImageToVtkImageData(grabImage, this->TextureImageData.GetPointer());
   };
-
-
-  //QImage grabImage("d:/_download/20210818_DosePlotXavier.png");
-  //vtkNew<vtkImageData> textureImage;
-  //qMRMLUtils::qImageToVtkImageData(grabImage, textureImage);
-  //vtkNew<vtkImageAppend> append;
-  //append->SetInputDataObject(textureImage);
-  //this->SetInputConnection(append->GetOutputPort());
 }
 
 //------------------------------------------------------------------------------

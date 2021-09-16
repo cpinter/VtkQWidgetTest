@@ -39,16 +39,6 @@
 #include "vtkVectorOperators.h"
 #include <QtWidgets/QWidget>
 
-//TODO!!!!!!!
-#include <vtkImageAppend.h>
-#include <vtkImageData.h>
-#include <vtkSmartPointer.h>
-#include <vtkTexture.h>
-#include <vtkTrivialProducer.h>
-#include <QImage>
-#include "qMRMLUtils.h"
-
-
 vtkStandardNewMacro(vtkSlicerQWidgetRepresentation);
 
 //------------------------------------------------------------------------------
@@ -65,16 +55,6 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
   this->PlaneActor = vtkActor::New();
   this->PlaneActor->SetMapper(this->PlaneMapper);
   this->PlaneActor->SetTexture(this->QWidgetTexture);
-
-  //TODO: For debugging
-  //vtkNew<vtkSlicerQWidgetTexture> texture; //TODO: CRASHES
-  //QImage grabImage("d:/_download/20210818_DosePlotXavier.png");
-  //vtkNew<vtkImageData> textureImage;
-  //qMRMLUtils::qImageToVtkImageData(grabImage, textureImage);
-  //vtkNew<vtkImageAppend> append;
-  //append->SetInputDataObject(textureImage);
-  //texture->SetInputConnection(append->GetOutputPort());
-  //this->PlaneActor->SetTexture(texture);
 
   this->PlaneActor->GetProperty()->SetAmbient(1.0);
   this->PlaneActor->GetProperty()->SetDiffuse(0.0);
