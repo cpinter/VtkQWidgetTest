@@ -64,19 +64,17 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
 
   this->PlaneActor = vtkActor::New();
   this->PlaneActor->SetMapper(this->PlaneMapper);
-  //this->PlaneActor->SetTexture(this->QWidgetTexture); //TODO:
+  this->PlaneActor->SetTexture(this->QWidgetTexture);
 
-//TODO!!!!!!!
-  //vtkNew<vtkTexture> texture; //TODO: WORKS
-  vtkNew<vtkSlicerQWidgetTexture> texture; //TODO: CRASHES
-  QImage grabImage("d:/_download/20210818_DosePlotXavier.png");
-  vtkNew<vtkImageData> textureImage;
-  qMRMLUtils::qImageToVtkImageData(grabImage, textureImage);
-  vtkNew<vtkImageAppend> append;
-  append->SetInputDataObject(textureImage);
-  texture->SetInputConnection(append->GetOutputPort());
-  this->PlaneActor->SetTexture(texture);
-
+  //TODO: For debugging
+  //vtkNew<vtkSlicerQWidgetTexture> texture; //TODO: CRASHES
+  //QImage grabImage("d:/_download/20210818_DosePlotXavier.png");
+  //vtkNew<vtkImageData> textureImage;
+  //qMRMLUtils::qImageToVtkImageData(grabImage, textureImage);
+  //vtkNew<vtkImageAppend> append;
+  //append->SetInputDataObject(textureImage);
+  //texture->SetInputConnection(append->GetOutputPort());
+  //this->PlaneActor->SetTexture(texture);
 
   this->PlaneActor->GetProperty()->SetAmbient(1.0);
   this->PlaneActor->GetProperty()->SetDiffuse(0.0);
@@ -101,7 +99,7 @@ vtkSlicerQWidgetRepresentation::~vtkSlicerQWidgetRepresentation()
 void vtkSlicerQWidgetRepresentation::SetWidget(QWidget* w)
 {
   // just pass down to the QWidgetTexture
-  //this->QWidgetTexture->SetWidget(w); //TODO:!!!!!!
+  this->QWidgetTexture->SetWidget(w);
   this->Modified();
 }
 
@@ -125,7 +123,7 @@ void vtkSlicerQWidgetRepresentation::ReleaseGraphicsResources(vtkWindow* w)
   this->Superclass::ReleaseGraphicsResources(w);
   this->PlaneActor->ReleaseGraphicsResources(w);
   this->PlaneMapper->ReleaseGraphicsResources(w);
-  //this->PlaneTexture->ReleaseGraphicsResources(w);
+  this->QWidgetTexture->ReleaseGraphicsResources(w);
 }
 
 //------------------------------------------------------------------------------
@@ -135,7 +133,7 @@ int vtkSlicerQWidgetRepresentation::RenderOpaqueGeometry(vtkViewport* v)
 
   if (this->PlaneActor->GetVisibility())
   {
-    //this->PlaneActor->SetPropertyKeys(this->GetPropertyKeys());
+    this->PlaneActor->SetPropertyKeys(this->GetPropertyKeys());
 
     count += this->PlaneActor->RenderOpaqueGeometry(v);
   }
@@ -197,13 +195,12 @@ void vtkSlicerQWidgetRepresentation::UpdateFromMRML(vtkMRMLNode* caller, unsigne
 
   this->NeedToRenderOn();
 
-//TODO:!!!!!!!!!
-  //if (!this->QWidgetTexture->GetWidget() || !this->ViewNode)
-  //  {
-  //  this->VisibilityOff();
-  //  this->PlaneActor->SetVisibility(false);
-  //  return;
-  //  }
+  if (!this->QWidgetTexture->GetWidget() || !this->ViewNode)
+  {
+    this->VisibilityOff();
+    this->PlaneActor->SetVisibility(false);
+    return;
+  }
 
   this->VisibilityOn();
   this->PlaneActor->SetVisibility(true);

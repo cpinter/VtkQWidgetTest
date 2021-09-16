@@ -26,7 +26,16 @@
 #include "vtkSlicerVtkQWidgetTestModuleVTKWidgetsExport.h"
 
 // VTK includes
+#include <vtkImageData.h>
+#include <vtkSmartPointer.h>
 #include <vtkOpenGLTexture.h>
+#include <vtkTrivialProducer.h>
+
+#include <functional> // for ivar
+
+class QGraphicsScene;
+class QImage;
+class QWidget;
 
 /**
  * @class vtkSlicerQWidgetTexture
@@ -42,9 +51,42 @@ public:
   vtkTypeMacro(vtkSlicerQWidgetTexture, vtkOpenGLTexture);
   void PrintSelf(ostream& os, vtkIndent indent) override;
 
+  ///@{
+  /**
+   * Set/Get the QWidget that this TextureObject will render/use.
+   * Just hold onto the widget until opengl context is active.
+   */
+  void SetWidget(QWidget* w);
+  QWidget* GetWidget() { return this->Widget; }
+  ///@}
+
+  /**
+   * get the QScene used for rendering, this is where events will
+   * be forwarded to.
+   */
+  QGraphicsScene* GetScene() { return this->Scene; }
+
+  /**
+   * Free resources
+   */
+  void ReleaseGraphicsResources(vtkWindow* win) override;
+
 protected:
   vtkSlicerQWidgetTexture();
   ~vtkSlicerQWidgetTexture() override;
+
+  QGraphicsScene* Scene;
+  QWidget* Widget;
+
+  vtkSmartPointer<vtkImageData> TextureImageData;
+  vtkSmartPointer<vtkTrivialProducer> TextureTrivialProducer;
+
+  /// method called when the widget needs repainting
+  std::function<void()> UpdateTextureMethod;
+
+  /// internal method to setup the scene/framebuffer/etc.
+  /// handle any setup required, only call when OpenGL context is active.
+  void AllocateFromWidget();
 
 private:
   vtkSlicerQWidgetTexture(const vtkSlicerQWidgetTexture&) = delete;
