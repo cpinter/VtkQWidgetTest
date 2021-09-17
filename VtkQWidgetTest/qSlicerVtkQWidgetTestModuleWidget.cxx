@@ -301,46 +301,9 @@ void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldVtkClicked()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldSlicerClicked()
+QWidget* qSlicerVtkQWidgetTestModuleWidget::addHelloWorldSlicerClicked()
 {
   Q_D(qSlicerVtkQWidgetTestModuleWidget);
-
-  /*
-  //QPushButton* hello = new QPushButton("Hello world!", this);
-  QPushButton hello( "Hello world!", 0 );
-
-  auto widgetOrWindow = d->create_widget_or_window(qSlicerVtkQWidgetTestModuleWidgetPrivate::Type::USE_QVTKRENDERWIDGET, nullptr);
-  vtkNew<vtkGenericOpenGLRenderWindow> window0;
-  vtkNew<vtkRenderer> renderer;
-  renderer->SetBackground(0.2, 0.3, 0.4);
-  window0->AddRenderer(renderer);
-  d->set_render_window(widgetOrWindow, window0);
-  d->show(widgetOrWindow, QSize(300, 300));
-  d->process_events_and_wait(100);
-  window0->Render();
-
-  vtkNew<vtkSlicerQWidgetWidget> widget;
-  widget->CreateDefaultRepresentation();
-  widget->GetQWidgetRepresentation()->GetPlaneSource()->SetPoint2(-0.5,0.5,-0.5);
-  widget->SetWidget( &hello );
-  widget->SetCurrentRenderer(renderer);
-  widget->SetInteractor(window0->GetInteractor());
-
-  widget->SetEnabled(1);
-  renderer->ResetCamera();
-  renderer->ResetCameraClippingRange();
-  window0->Render();
-  d->process_events_and_wait(100);
-  //vtktesting->SetRenderWindow(window0);
-  //renderer->ResetCamera();
-  //window0->Render();
-  //d->process_events_and_wait(100);
-  //window0->Render();
-
-  // clear the widget first, to avoid using it
-  // after it may have been freed.
-  widget->SetWidget(nullptr);
-  */
 
   qSlicerApplication * app = qSlicerApplication::application();
   if (!app || !app->layoutManager())
@@ -348,7 +311,7 @@ void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldSlicerClicked()
     qCritical() << Q_FUNC_INFO << ": Failed to access layout manager";
   }
 
-  this->Widget = new QPushButton("Hello world!", this);
+  this->Widget = new QPushButton("Hello world!");
 
   this->SlicerQWidgetWidget = vtkSmartPointer<vtkSlicerQWidgetWidget>::New();
   this->SlicerQWidgetWidget->SetWidget(this->Widget);
@@ -357,4 +320,6 @@ void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldSlicerClicked()
   vtkRenderer* activeRenderer = app->layoutManager()->activeThreeDRenderer();
   vtkMRMLViewNode* viewNode = threeDView->mrmlViewNode();
   this->SlicerQWidgetWidget->CreateDefaultRepresentation(viewNode, activeRenderer);
+
+  return this->Widget;
 }

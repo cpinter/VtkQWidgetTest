@@ -112,6 +112,7 @@ void vtkSlicerQWidgetTexture::AllocateFromWidget()
   this->Scene->addWidget(this->Widget);
 
   QObject::connect(this->Scene, &QGraphicsScene::changed, this->UpdateTextureMethod);
+  QObject::connect(this->Widget, &QObject::objectNameChanged, this->UpdateTextureMethod); //TODO: For debugging
 
   if (this->TextureImageData.GetPointer() == nullptr)
   {
