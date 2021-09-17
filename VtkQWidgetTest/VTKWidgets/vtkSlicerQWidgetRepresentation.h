@@ -38,8 +38,9 @@
 #include "vtkMRMLAbstractWidgetRepresentation.h"
 
 class QWidget;
+
 class vtkActor;
-class vtkCellPicker;
+class vtkCallbackCommand;
 class vtkOpenGLTexture;
 class vtkPlaneSource;
 class vtkPolyDataAlgorithm;
@@ -112,9 +113,10 @@ public:
   vtkGetVector2Macro(WidgetCoordinates, int);
 
 protected:
-  vtkSlicerQWidgetRepresentation();
-  ~vtkSlicerQWidgetRepresentation() override;
+  /// Callback function observing texture modified events.
+  static void OnTextureModified(vtkObject* caller, unsigned long eid, void* clientData, void* callData);
 
+protected:
   int WidgetCoordinates[2];
 
   vtkPlaneSource* PlaneSource;
@@ -122,6 +124,11 @@ protected:
   vtkActor* PlaneActor;
   vtkOpenGLTexture* PlaneTexture;
   vtkSlicerQWidgetTexture* QWidgetTexture;
+  vtkCallbackCommand* TextureCallbackCommand;
+
+protected:
+  vtkSlicerQWidgetRepresentation();
+  ~vtkSlicerQWidgetRepresentation() override;
 
 private:
   vtkSlicerQWidgetRepresentation(const vtkSlicerQWidgetRepresentation&) = delete;

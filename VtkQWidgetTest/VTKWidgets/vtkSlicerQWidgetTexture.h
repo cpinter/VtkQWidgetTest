@@ -84,9 +84,8 @@ protected:
   /// method called when the widget needs repainting
   std::function<void()> UpdateTextureMethod;
 
-  /// internal method to setup the scene/framebuffer/etc.
-  /// handle any setup required, only call when OpenGL context is active.
-  void AllocateFromWidget();
+  /// Setup new widget with the graphics scene observation
+  void SetupWidget();
 
 private:
   vtkSlicerQWidgetTexture(const vtkSlicerQWidgetTexture&) = delete;

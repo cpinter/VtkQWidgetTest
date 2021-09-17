@@ -28,23 +28,15 @@
 
 // VTK includes
 #include <vtkObjectFactory.h>
-#include <vtkImageAppend.h>
 
 // Qt includes
 #include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
 #include <QImage>
-#include <QPainter>
 #include <QWidget>
 
 //------------------------------------------------------------------------------
 vtkStandardNewMacro(vtkSlicerQWidgetTexture);
-
-//------------------------------------------------------------------------------
-void vtkSlicerQWidgetTexture::PrintSelf(ostream& os, vtkIndent indent)
-{
-  this->Superclass::PrintSelf(os, indent);
-}
 
 //------------------------------------------------------------------------------
 vtkSlicerQWidgetTexture::vtkSlicerQWidgetTexture()
@@ -61,6 +53,7 @@ vtkSlicerQWidgetTexture::vtkSlicerQWidgetTexture()
     qSlicerCoreApplication* app = qSlicerCoreApplication::application();
     QString grabImageFilePath = QString("%1/vtkSlicerQWidgetTextureImage.png").arg(app->temporaryPath());
     qMRMLUtils::qImageToVtkImageData(grabImage, this->TextureImageData.GetPointer());
+    this->Modified();
   };
 }
 
@@ -70,6 +63,12 @@ vtkSlicerQWidgetTexture::~vtkSlicerQWidgetTexture()
   this->SetWidget(nullptr);
   delete this->Scene;
   this->Scene = nullptr;
+}
+
+//------------------------------------------------------------------------------
+void vtkSlicerQWidgetTexture::PrintSelf(ostream& os, vtkIndent indent)
+{
+  this->Superclass::PrintSelf(os, indent);
 }
 
 //------------------------------------------------------------------------------
@@ -93,13 +92,13 @@ void vtkSlicerQWidgetTexture::SetWidget(QWidget* w)
 
   this->Widget = w;
 
-  this->AllocateFromWidget();
+  this->SetupWidget();
 
   this->Modified();
 }
 
 //------------------------------------------------------------------------------
-void vtkSlicerQWidgetTexture::AllocateFromWidget()
+void vtkSlicerQWidgetTexture::SetupWidget()
 {
   if (!this->Widget)
   {

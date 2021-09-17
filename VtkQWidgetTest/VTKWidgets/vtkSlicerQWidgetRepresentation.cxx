@@ -24,20 +24,21 @@
 
 #include "vtkSlicerQWidgetTexture.h"
 
-#include "vtkActor.h"
-#include "vtkCellPicker.h"
-#include "vtkEventData.h"
-#include "vtkObjectFactory.h"
-#include "vtkOpenGLRenderWindow.h"
-#include "vtkOpenGLState.h"
-#include "vtkOpenGLTexture.h"
-#include "vtkPickingManager.h"
-#include "vtkPlaneSource.h"
-#include "vtkPolyDataMapper.h"
-#include "vtkProperty.h"
-#include "vtkRenderer.h"
-#include "vtkVectorOperators.h"
-#include <QtWidgets/QWidget>
+// VTK includes
+#include <vtkActor.h>
+#include <vtkCallbackCommand.h>
+#include <vtkEventData.h>
+#include <vtkObjectFactory.h>
+#include <vtkOpenGLRenderWindow.h>
+#include <vtkOpenGLTexture.h>
+#include <vtkPlaneSource.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
+#include <vtkRenderer.h>
+
+// Qt includes
+#include <QRect>
+#include <QWidget>
 
 vtkStandardNewMacro(vtkSlicerQWidgetRepresentation);
 
@@ -50,7 +51,12 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
   this->PlaneMapper = vtkPolyDataMapper::New();
   this->PlaneMapper->SetInputConnection(this->PlaneSource->GetOutputPort());
 
+  this->TextureCallbackCommand = vtkCallbackCommand::New();
+  this->TextureCallbackCommand->SetClientData( reinterpret_cast<void *>(this) );
+  this->TextureCallbackCommand->SetCallback( vtkSlicerQWidgetRepresentation::OnTextureModified ); 
+
   this->QWidgetTexture = vtkSlicerQWidgetTexture::New();
+  this->QWidgetTexture->AddObserver(vtkCommand::ModifiedEvent, this->TextureCallbackCommand);
 
   this->PlaneActor = vtkActor::New();
   this->PlaneActor->SetMapper(this->PlaneMapper);
@@ -60,7 +66,7 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
   this->PlaneActor->GetProperty()->SetDiffuse(0.0);
 
   // Define the point coordinates
-  double bounds[6] = {-50, 50, -50, 50, -50, 50 };
+  double bounds[6] = {-80, 80, -0.5, 0.5, -50, 50 }; // Width, Depth, Height
 
   // Initial creation of the widget, serves to initialize it
   this->PlaceWidget(bounds);
@@ -69,10 +75,34 @@ vtkSlicerQWidgetRepresentation::vtkSlicerQWidgetRepresentation()
 //------------------------------------------------------------------------------
 vtkSlicerQWidgetRepresentation::~vtkSlicerQWidgetRepresentation()
 {
-  this->PlaneSource->Delete();
-  this->PlaneMapper->Delete();
-  this->PlaneActor->Delete();
-  this->QWidgetTexture->Delete();
+  if (this->PlaneSource)
+  {
+    this->PlaneSource->Delete();
+    this->PlaneSource = nullptr;
+  }
+  if (this->PlaneMapper)
+  {
+    this->PlaneMapper->Delete();
+    this->PlaneMapper = nullptr;
+  }
+  if (this->PlaneActor)
+  {
+    this->PlaneActor->Delete();
+    this->PlaneActor = nullptr;
+  }
+
+  if (this->QWidgetTexture)
+  {
+    this->QWidgetTexture->RemoveObserver(this->TextureCallbackCommand);
+    this->QWidgetTexture->Delete();
+    this->QWidgetTexture = nullptr;
+  }
+  if (this->TextureCallbackCommand)
+  {
+    this->TextureCallbackCommand->SetClientData(nullptr);
+    this->TextureCallbackCommand->Delete();
+    this->TextureCallbackCommand = nullptr;
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -184,4 +214,25 @@ void vtkSlicerQWidgetRepresentation::UpdateFromMRML(vtkMRMLNode* caller, unsigne
 
   this->VisibilityOn();
   this->PlaneActor->SetVisibility(true);
+}
+
+//---------------------------------------------------------------------------
+void vtkSlicerQWidgetRepresentation::OnTextureModified(
+  vtkObject* vtkNotUsed(caller), unsigned long vtkNotUsed(eid), void* clientData, void* vtkNotUsed(callData))
+{
+  vtkSlicerQWidgetRepresentation* self = reinterpret_cast<vtkSlicerQWidgetRepresentation*>(clientData);
+
+  // Redefine widget plane
+  QWidget* widget = self->QWidgetTexture->GetWidget();
+  QRect rect = widget->geometry();
+  if (rect.width() < 2 || rect.height() < 2)
+  {
+    return;
+  }
+  double bounds[6] = {
+    -(double)(rect.width()/2), (double)rect.width()/2,
+    -0.5, 0.5,
+    -(double)(rect.height()/2), (double)rect.height()/2
+  };
+  self->PlaceWidget(bounds);
 }
