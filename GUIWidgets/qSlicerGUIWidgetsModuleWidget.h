@@ -49,7 +49,6 @@ public:
   virtual ~qSlicerGUIWidgetsModuleWidget();
 
 public slots:
-  void addHelloWorldVtkClicked();
   QWidget* addHelloWorldSlicerClicked();
 
 protected:

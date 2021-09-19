@@ -50,8 +50,6 @@ vtkSlicerQWidgetTexture::vtkSlicerQWidgetTexture()
       return;
     }
     QImage grabImage(this->Widget->grab().toImage());
-    qSlicerCoreApplication* app = qSlicerCoreApplication::application();
-    QString grabImageFilePath = QString("%1/vtkSlicerQWidgetTextureImage.png").arg(app->temporaryPath());
     qMRMLUtils::qImageToVtkImageData(grabImage, this->TextureImageData.GetPointer());
     this->Modified();
   };

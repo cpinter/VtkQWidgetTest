@@ -21,13 +21,6 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QPushButton" name="AddHelloWorldWidgetButton_VTK">
-        <property name="text">
-         <string>Add Hello World native VTK widget to 3D view</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="AddHelloWorldWidgetButton_Slicer">
         <property name="text">
          <string>Add Hello World Slicer VTK widget to 3D view</string>
