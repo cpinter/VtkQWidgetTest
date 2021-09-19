@@ -33,7 +33,7 @@
 #ifndef vtkSlicerQWidgetWidget_h
 #define vtkSlicerQWidgetWidget_h
 
-#include "vtkSlicerVtkQWidgetTestModuleVTKWidgetsExport.h"
+#include "vtkSlicerGUIWidgetsModuleVTKWidgetsExport.h"
 
 #include "vtkMRMLAbstractWidget.h"
 
@@ -42,7 +42,7 @@
 class QWidget;
 class vtkSlicerQWidgetRepresentation;
 
-class VTK_SLICER_VTKQWIDGETTEST_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetWidget : public vtkMRMLAbstractWidget
+class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetWidget : public vtkMRMLAbstractWidget
 {
   friend class vtkInteractionCallback;
 

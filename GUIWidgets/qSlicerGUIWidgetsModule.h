@@ -13,22 +13,25 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
+  This file was originally developed by Csaba Pinter, EBATINCA, S.L., and
+  development was supported by "ICEX Espana Exportacion e Inversiones" under
+  the program "Inversiones de Empresas Extranjeras en Actividades de I+D
+  (Fondo Tecnologico)- Convocatoria 2021"
+
 ==============================================================================*/
 
-#ifndef __qSlicerVtkQWidgetTestModule_h
-#define __qSlicerVtkQWidgetTestModule_h
+#ifndef __qSlicerGUIWidgetsModule_h
+#define __qSlicerGUIWidgetsModule_h
 
 // Slicer includes
 #include "qSlicerLoadableModule.h"
 
-#include "qSlicerVtkQWidgetTestModuleExport.h"
+#include "qSlicerGUIWidgetsModuleExport.h"
 
-class qSlicerVtkQWidgetTestModulePrivate;
+class qSlicerGUIWidgetsModulePrivate;
 
 /// \ingroup Slicer_QtModules_ExtensionTemplate
-class Q_SLICER_QTMODULES_VTKQWIDGETTEST_EXPORT
-qSlicerVtkQWidgetTestModule
-  : public qSlicerLoadableModule
+class Q_SLICER_QTMODULES_GUIWIDGETS_EXPORT qSlicerGUIWidgetsModule : public qSlicerLoadableModule
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID "org.slicer.modules.loadable.qSlicerLoadableModule/1.0");
@@ -37,8 +40,8 @@ qSlicerVtkQWidgetTestModule
 public:
 
   typedef qSlicerLoadableModule Superclass;
-  explicit qSlicerVtkQWidgetTestModule(QObject *parent=0);
-  virtual ~qSlicerVtkQWidgetTestModule();
+  explicit qSlicerGUIWidgetsModule(QObject *parent=0);
+  virtual ~qSlicerGUIWidgetsModule();
 
   qSlicerGetTitleMacro(QTMODULE_TITLE);
 
@@ -57,17 +60,17 @@ protected:
   virtual void setup();
 
   /// Create and return the widget representation associated to this module
-  virtual qSlicerAbstractModuleRepresentation * createWidgetRepresentation();
+  virtual qSlicerAbstractModuleRepresentation* createWidgetRepresentation();
 
   /// Create and return the logic associated to this module
   virtual vtkMRMLAbstractLogic* createLogic();
 
 protected:
-  QScopedPointer<qSlicerVtkQWidgetTestModulePrivate> d_ptr;
+  QScopedPointer<qSlicerGUIWidgetsModulePrivate> d_ptr;
 
 private:
-  Q_DECLARE_PRIVATE(qSlicerVtkQWidgetTestModule);
-  Q_DISABLE_COPY(qSlicerVtkQWidgetTestModule);
+  Q_DECLARE_PRIVATE(qSlicerGUIWidgetsModule);
+  Q_DISABLE_COPY(qSlicerGUIWidgetsModule);
 
 };
 

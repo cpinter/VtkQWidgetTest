@@ -23,7 +23,7 @@
 #ifndef vtkSlicerQWidgetTexture_h
 #define vtkSlicerQWidgetTexture_h
 
-#include "vtkSlicerVtkQWidgetTestModuleVTKWidgetsExport.h"
+#include "vtkSlicerGUIWidgetsModuleVTKWidgetsExport.h"
 
 // VTK includes
 #include <vtkImageData.h>
@@ -44,7 +44,7 @@ class QWidget;
  * This class works by rendering the QWidget into a Framebuffer
  * and then sending the OpenGL texture handle to VTK for rendering.
  */
-class VTK_SLICER_VTKQWIDGETTEST_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetTexture : public vtkOpenGLTexture
+class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetTexture : public vtkOpenGLTexture
 {
 public:
   static vtkSlicerQWidgetTexture* New();

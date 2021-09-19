@@ -13,14 +13,19 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
+  This file was originally developed by Csaba Pinter, EBATINCA, S.L., and
+  development was supported by "ICEX Espana Exportacion e Inversiones" under
+  the program "Inversiones de Empresas Extranjeras en Actividades de I+D
+  (Fondo Tecnologico)- Convocatoria 2021"
+
 ==============================================================================*/
 
 // Qt includes
 #include <QDebug>
 
 // Slicer includes
-#include "qSlicerVtkQWidgetTestModuleWidget.h"
-#include "ui_qSlicerVtkQWidgetTestModuleWidget.h"
+#include "qSlicerGUIWidgetsModuleWidget.h"
+#include "ui_qSlicerGUIWidgetsModuleWidget.h"
 
 #include "vtkSlicerQWidgetRepresentation.h"
 #include "vtkSlicerQWidgetWidget.h"
@@ -44,10 +49,10 @@
 
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_ExtensionTemplate
-class qSlicerVtkQWidgetTestModuleWidgetPrivate: public Ui_qSlicerVtkQWidgetTestModuleWidget
+class qSlicerGUIWidgetsModuleWidgetPrivate: public Ui_qSlicerGUIWidgetsModuleWidget
 {
 public:
-  qSlicerVtkQWidgetTestModuleWidgetPrivate();
+  qSlicerGUIWidgetsModuleWidgetPrivate();
 
 public:
   enum class Type
@@ -69,16 +74,16 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// qSlicerVtkQWidgetTestModuleWidgetPrivate methods
+// qSlicerGUIWidgetsModuleWidgetPrivate methods
 
 //-----------------------------------------------------------------------------
-qSlicerVtkQWidgetTestModuleWidgetPrivate::qSlicerVtkQWidgetTestModuleWidgetPrivate()
+qSlicerGUIWidgetsModuleWidgetPrivate::qSlicerGUIWidgetsModuleWidgetPrivate()
 {
 }
 
 //-----------------------------------------------------------------------------
 // TestingQtCommon method clones
-std::shared_ptr<QObject> qSlicerVtkQWidgetTestModuleWidgetPrivate::create_widget_or_window(Type type, vtkGenericOpenGLRenderWindow* renWin)
+std::shared_ptr<QObject> qSlicerGUIWidgetsModuleWidgetPrivate::create_widget_or_window(Type type, vtkGenericOpenGLRenderWindow* renWin)
 {
   switch (type)
   {
@@ -131,7 +136,7 @@ std::shared_ptr<QObject> qSlicerVtkQWidgetTestModuleWidgetPrivate::create_widget
   return nullptr;
 }
 
-vtkRenderWindow* qSlicerVtkQWidgetTestModuleWidgetPrivate::get_render_window(std::shared_ptr<QObject> widgetOrWindow)
+vtkRenderWindow* qSlicerGUIWidgetsModuleWidgetPrivate::get_render_window(std::shared_ptr<QObject> widgetOrWindow)
 {
   if (auto w1 = qobject_cast<QVTKRenderWidget*>(widgetOrWindow.get()))
   {
@@ -161,7 +166,7 @@ vtkRenderWindow* qSlicerVtkQWidgetTestModuleWidgetPrivate::get_render_window(std
   return nullptr;
 }
 
-void qSlicerVtkQWidgetTestModuleWidgetPrivate::set_render_window(std::shared_ptr<QObject> widgetOrWindow, vtkRenderWindow* renWin)
+void qSlicerGUIWidgetsModuleWidgetPrivate::set_render_window(std::shared_ptr<QObject> widgetOrWindow, vtkRenderWindow* renWin)
 {
   if (auto w1 = qobject_cast<QVTKRenderWidget*>(widgetOrWindow.get()))
   {
@@ -189,7 +194,7 @@ void qSlicerVtkQWidgetTestModuleWidgetPrivate::set_render_window(std::shared_ptr
   }
 }
 
-void qSlicerVtkQWidgetTestModuleWidgetPrivate::process_events_and_wait(int msec)
+void qSlicerGUIWidgetsModuleWidgetPrivate::process_events_and_wait(int msec)
 {
   QApplication::sendPostedEvents();
   QApplication::processEvents();
@@ -207,7 +212,7 @@ void qSlicerVtkQWidgetTestModuleWidgetPrivate::process_events_and_wait(int msec)
   QApplication::processEvents();
 }
 
-void qSlicerVtkQWidgetTestModuleWidgetPrivate::show(std::shared_ptr<QObject> widgetOrWindow, const QSize& size)
+void qSlicerGUIWidgetsModuleWidgetPrivate::show(std::shared_ptr<QObject> widgetOrWindow, const QSize& size)
 {
   if (widgetOrWindow->isWidgetType())
   {
@@ -234,24 +239,24 @@ void qSlicerVtkQWidgetTestModuleWidgetPrivate::show(std::shared_ptr<QObject> wid
 
 
 //-----------------------------------------------------------------------------
-// qSlicerVtkQWidgetTestModuleWidget methods
+// qSlicerGUIWidgetsModuleWidget methods
 
 //-----------------------------------------------------------------------------
-qSlicerVtkQWidgetTestModuleWidget::qSlicerVtkQWidgetTestModuleWidget(QWidget* _parent)
+qSlicerGUIWidgetsModuleWidget::qSlicerGUIWidgetsModuleWidget(QWidget* _parent)
   : Superclass( _parent )
-  , d_ptr( new qSlicerVtkQWidgetTestModuleWidgetPrivate )
+  , d_ptr( new qSlicerGUIWidgetsModuleWidgetPrivate )
 {
 }
 
 //-----------------------------------------------------------------------------
-qSlicerVtkQWidgetTestModuleWidget::~qSlicerVtkQWidgetTestModuleWidget()
+qSlicerGUIWidgetsModuleWidget::~qSlicerGUIWidgetsModuleWidget()
 {
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerVtkQWidgetTestModuleWidget::setup()
+void qSlicerGUIWidgetsModuleWidget::setup()
 {
-  Q_D(qSlicerVtkQWidgetTestModuleWidget);
+  Q_D(qSlicerGUIWidgetsModuleWidget);
   d->setupUi(this);
   this->Superclass::setup();
 
@@ -260,14 +265,14 @@ void qSlicerVtkQWidgetTestModuleWidget::setup()
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldVtkClicked()
+void qSlicerGUIWidgetsModuleWidget::addHelloWorldVtkClicked()
 {
-  Q_D(qSlicerVtkQWidgetTestModuleWidget);
+  Q_D(qSlicerGUIWidgetsModuleWidget);
 
   //QPushButton* hello = new QPushButton("Hello world!", this);
   QPushButton hello( "Hello world!", 0 );
 
-  auto widgetOrWindow = d->create_widget_or_window(qSlicerVtkQWidgetTestModuleWidgetPrivate::Type::USE_QVTKRENDERWIDGET, nullptr);
+  auto widgetOrWindow = d->create_widget_or_window(qSlicerGUIWidgetsModuleWidgetPrivate::Type::USE_QVTKRENDERWIDGET, nullptr);
   vtkNew<vtkGenericOpenGLRenderWindow> window0;
   vtkNew<vtkRenderer> renderer;
   renderer->SetBackground(0.2, 0.3, 0.4);
@@ -301,9 +306,9 @@ void qSlicerVtkQWidgetTestModuleWidget::addHelloWorldVtkClicked()
 }
 
 //-----------------------------------------------------------------------------
-QWidget* qSlicerVtkQWidgetTestModuleWidget::addHelloWorldSlicerClicked()
+QWidget* qSlicerGUIWidgetsModuleWidget::addHelloWorldSlicerClicked()
 {
-  Q_D(qSlicerVtkQWidgetTestModuleWidget);
+  Q_D(qSlicerGUIWidgetsModuleWidget);
 
   qSlicerApplication * app = qSlicerApplication::application();
   if (!app || !app->layoutManager())

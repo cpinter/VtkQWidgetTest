@@ -13,26 +13,31 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
+  This file was originally developed by Csaba Pinter, EBATINCA, S.L., and
+  development was supported by "ICEX Espana Exportacion e Inversiones" under
+  the program "Inversiones de Empresas Extranjeras en Actividades de I+D
+  (Fondo Tecnologico)- Convocatoria 2021"
+
 ==============================================================================*/
 
-#ifndef __qSlicerVtkQWidgetTestModuleWidget_h
-#define __qSlicerVtkQWidgetTestModuleWidget_h
+#ifndef __qSlicerGUIWidgetsModuleWidget_h
+#define __qSlicerGUIWidgetsModuleWidget_h
 
 // Slicer includes
 #include "qSlicerAbstractModuleWidget.h"
 
-#include "qSlicerVtkQWidgetTestModuleExport.h"
+#include "qSlicerGUIWidgetsModuleExport.h"
 
 #include "vtkSlicerQWidgetWidget.h"
 
 // VTK includes
 #include <vtkSmartPointer.h>
 
-class qSlicerVtkQWidgetTestModuleWidgetPrivate;
+class qSlicerGUIWidgetsModuleWidgetPrivate;
 class vtkMRMLNode;
 
 /// \ingroup Slicer_QtModules_ExtensionTemplate
-class Q_SLICER_QTMODULES_VTKQWIDGETTEST_EXPORT qSlicerVtkQWidgetTestModuleWidget :
+class Q_SLICER_QTMODULES_GUIWIDGETS_EXPORT qSlicerGUIWidgetsModuleWidget :
   public qSlicerAbstractModuleWidget
 {
   Q_OBJECT
@@ -40,15 +45,15 @@ class Q_SLICER_QTMODULES_VTKQWIDGETTEST_EXPORT qSlicerVtkQWidgetTestModuleWidget
 public:
 
   typedef qSlicerAbstractModuleWidget Superclass;
-  qSlicerVtkQWidgetTestModuleWidget(QWidget *parent=0);
-  virtual ~qSlicerVtkQWidgetTestModuleWidget();
+  qSlicerGUIWidgetsModuleWidget(QWidget *parent=0);
+  virtual ~qSlicerGUIWidgetsModuleWidget();
 
 public slots:
   void addHelloWorldVtkClicked();
   QWidget* addHelloWorldSlicerClicked();
 
 protected:
-  QScopedPointer<qSlicerVtkQWidgetTestModuleWidgetPrivate> d_ptr;
+  QScopedPointer<qSlicerGUIWidgetsModuleWidgetPrivate> d_ptr;
 
   virtual void setup();
 
@@ -57,8 +62,8 @@ protected:
   QWidget* Widget;
 
 private:
-  Q_DECLARE_PRIVATE(qSlicerVtkQWidgetTestModuleWidget);
-  Q_DISABLE_COPY(qSlicerVtkQWidgetTestModuleWidget);
+  Q_DECLARE_PRIVATE(qSlicerGUIWidgetsModuleWidget);
+  Q_DISABLE_COPY(qSlicerGUIWidgetsModuleWidget);
 };
 
 #endif

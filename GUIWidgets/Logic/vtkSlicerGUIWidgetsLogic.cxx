@@ -15,8 +15,8 @@
 
 ==============================================================================*/
 
-// VtkQWidgetTest Logic includes
-#include "vtkSlicerVtkQWidgetTestLogic.h"
+// GUIWidgets Logic includes
+#include "vtkSlicerGUIWidgetsLogic.h"
 
 // MRML includes
 #include <vtkMRMLScene.h>
@@ -30,26 +30,26 @@
 #include <cassert>
 
 //----------------------------------------------------------------------------
-vtkStandardNewMacro(vtkSlicerVtkQWidgetTestLogic);
+vtkStandardNewMacro(vtkSlicerGUIWidgetsLogic);
 
 //----------------------------------------------------------------------------
-vtkSlicerVtkQWidgetTestLogic::vtkSlicerVtkQWidgetTestLogic()
+vtkSlicerGUIWidgetsLogic::vtkSlicerGUIWidgetsLogic()
 {
 }
 
 //----------------------------------------------------------------------------
-vtkSlicerVtkQWidgetTestLogic::~vtkSlicerVtkQWidgetTestLogic()
+vtkSlicerGUIWidgetsLogic::~vtkSlicerGUIWidgetsLogic()
 {
 }
 
 //----------------------------------------------------------------------------
-void vtkSlicerVtkQWidgetTestLogic::PrintSelf(ostream& os, vtkIndent indent)
+void vtkSlicerGUIWidgetsLogic::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerVtkQWidgetTestLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene)
+void vtkSlicerGUIWidgetsLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene)
 {
   vtkNew<vtkIntArray> events;
   events->InsertNextValue(vtkMRMLScene::NodeAddedEvent);
@@ -59,25 +59,25 @@ void vtkSlicerVtkQWidgetTestLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene)
 }
 
 //-----------------------------------------------------------------------------
-void vtkSlicerVtkQWidgetTestLogic::RegisterNodes()
+void vtkSlicerGUIWidgetsLogic::RegisterNodes()
 {
   assert(this->GetMRMLScene() != 0);
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerVtkQWidgetTestLogic::UpdateFromMRMLScene()
+void vtkSlicerGUIWidgetsLogic::UpdateFromMRMLScene()
 {
   assert(this->GetMRMLScene() != 0);
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerVtkQWidgetTestLogic
+void vtkSlicerGUIWidgetsLogic
 ::OnMRMLSceneNodeAdded(vtkMRMLNode* vtkNotUsed(node))
 {
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerVtkQWidgetTestLogic
+void vtkSlicerGUIWidgetsLogic
 ::OnMRMLSceneNodeRemoved(vtkMRMLNode* vtkNotUsed(node))
 {
 }

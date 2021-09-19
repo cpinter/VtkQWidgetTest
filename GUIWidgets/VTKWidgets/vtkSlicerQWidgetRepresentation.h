@@ -33,7 +33,7 @@
 #ifndef vtkSlicerQWidgetRepresentation_h
 #define vtkSlicerQWidgetRepresentation_h
 
-#include "vtkSlicerVtkQWidgetTestModuleVTKWidgetsExport.h"
+#include "vtkSlicerGUIWidgetsModuleVTKWidgetsExport.h"
 
 #include "vtkMRMLAbstractWidgetRepresentation.h"
 
@@ -47,7 +47,7 @@ class vtkPolyDataAlgorithm;
 class vtkPolyDataMapper;
 class vtkSlicerQWidgetTexture;
 
-class VTK_SLICER_VTKQWIDGETTEST_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetRepresentation : public vtkMRMLAbstractWidgetRepresentation
+class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetRepresentation : public vtkMRMLAbstractWidgetRepresentation
 {
 public:
   /**

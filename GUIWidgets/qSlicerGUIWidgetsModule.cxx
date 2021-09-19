@@ -13,99 +13,106 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
+  This file was originally developed by Csaba Pinter, EBATINCA, S.L., and
+  development was supported by "ICEX Espana Exportacion e Inversiones" under
+  the program "Inversiones de Empresas Extranjeras en Actividades de I+D
+  (Fondo Tecnologico)- Convocatoria 2021"
+
 ==============================================================================*/
 
-// VtkQWidgetTest Logic includes
-#include <vtkSlicerVtkQWidgetTestLogic.h>
+// GUIWidgets Logic includes
+#include <vtkSlicerGUIWidgetsLogic.h>
 
-// VtkQWidgetTest includes
-#include "qSlicerVtkQWidgetTestModule.h"
-#include "qSlicerVtkQWidgetTestModuleWidget.h"
+// GUIWidgets includes
+#include "qSlicerGUIWidgetsModule.h"
+#include "qSlicerGUIWidgetsModuleWidget.h"
 
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_ExtensionTemplate
-class qSlicerVtkQWidgetTestModulePrivate
+class qSlicerGUIWidgetsModulePrivate
 {
 public:
-  qSlicerVtkQWidgetTestModulePrivate();
+  qSlicerGUIWidgetsModulePrivate();
 };
 
 //-----------------------------------------------------------------------------
-// qSlicerVtkQWidgetTestModulePrivate methods
+// qSlicerGUIWidgetsModulePrivate methods
 
 //-----------------------------------------------------------------------------
-qSlicerVtkQWidgetTestModulePrivate::qSlicerVtkQWidgetTestModulePrivate()
+qSlicerGUIWidgetsModulePrivate::qSlicerGUIWidgetsModulePrivate()
 {
 }
 
 //-----------------------------------------------------------------------------
-// qSlicerVtkQWidgetTestModule methods
+// qSlicerGUIWidgetsModule methods
 
 //-----------------------------------------------------------------------------
-qSlicerVtkQWidgetTestModule::qSlicerVtkQWidgetTestModule(QObject* _parent)
+qSlicerGUIWidgetsModule::qSlicerGUIWidgetsModule(QObject* _parent)
   : Superclass(_parent)
-  , d_ptr(new qSlicerVtkQWidgetTestModulePrivate)
+  , d_ptr(new qSlicerGUIWidgetsModulePrivate)
 {
 }
 
 //-----------------------------------------------------------------------------
-qSlicerVtkQWidgetTestModule::~qSlicerVtkQWidgetTestModule()
+qSlicerGUIWidgetsModule::~qSlicerGUIWidgetsModule()
 {
 }
 
 //-----------------------------------------------------------------------------
-QString qSlicerVtkQWidgetTestModule::helpText() const
+QString qSlicerGUIWidgetsModule::helpText() const
 {
   return "This is a loadable module that can be bundled in an extension";
 }
 
 //-----------------------------------------------------------------------------
-QString qSlicerVtkQWidgetTestModule::acknowledgementText() const
+QString qSlicerGUIWidgetsModule::acknowledgementText() const
 {
-  return "This work was partially funded by NIH grant NXNNXXNNNNNN-NNXN";
+  return "This work was partially funded by the grant 'ICEX Espana Exportacion e Inversiones' under\
+ the program 'Inversiones de Empresas Extranjeras en Actividades de I+D\
+ (Fondo Tecnologico)- Convocatoria 2021'";
 }
 
 //-----------------------------------------------------------------------------
-QStringList qSlicerVtkQWidgetTestModule::contributors() const
+QStringList qSlicerGUIWidgetsModule::contributors() const
 {
   QStringList moduleContributors;
-  moduleContributors << QString("John Doe (AnyWare Corp.)");
+  moduleContributors << QString("Csaba Pinter (Ebatinca)");
   return moduleContributors;
 }
 
 //-----------------------------------------------------------------------------
-QIcon qSlicerVtkQWidgetTestModule::icon() const
+QIcon qSlicerGUIWidgetsModule::icon() const
 {
-  return QIcon(":/Icons/VtkQWidgetTest.png");
+  return QIcon(":/Icons/GUIWidgets.png");
 }
 
 //-----------------------------------------------------------------------------
-QStringList qSlicerVtkQWidgetTestModule::categories() const
+QStringList qSlicerGUIWidgetsModule::categories() const
 {
-  return QStringList() << "Examples";
+  return QStringList() << "Informatics";
 }
 
 //-----------------------------------------------------------------------------
-QStringList qSlicerVtkQWidgetTestModule::dependencies() const
+QStringList qSlicerGUIWidgetsModule::dependencies() const
 {
   return QStringList();
 }
 
 //-----------------------------------------------------------------------------
-void qSlicerVtkQWidgetTestModule::setup()
+void qSlicerGUIWidgetsModule::setup()
 {
   this->Superclass::setup();
 }
 
 //-----------------------------------------------------------------------------
-qSlicerAbstractModuleRepresentation* qSlicerVtkQWidgetTestModule
+qSlicerAbstractModuleRepresentation* qSlicerGUIWidgetsModule
 ::createWidgetRepresentation()
 {
-  return new qSlicerVtkQWidgetTestModuleWidget;
+  return new qSlicerGUIWidgetsModuleWidget;
 }
 
 //-----------------------------------------------------------------------------
-vtkMRMLAbstractLogic* qSlicerVtkQWidgetTestModule::createLogic()
+vtkMRMLAbstractLogic* qSlicerGUIWidgetsModule::createLogic()
 {
-  return vtkSlicerVtkQWidgetTestLogic::New();
+  return vtkSlicerGUIWidgetsLogic::New();
 }
