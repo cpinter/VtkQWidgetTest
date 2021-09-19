@@ -56,9 +56,7 @@ public:
   static vtkSlicerQWidgetRepresentation* New();
 
   ///@{
-  /**
-   * Standard methods for the class.
-   */
+  /// Standard methods for the class.
   vtkTypeMacro(vtkSlicerQWidgetRepresentation, vtkMRMLAbstractWidgetRepresentation);
   void PrintSelf(ostream& os, vtkIndent indent) override;
   ///@}
@@ -72,9 +70,7 @@ public:
   void PlaceWidget(double bounds[6]);
 
   ///@{
-  /**
-   * Methods supporting the rendering process.
-   */
+  /// Methods supporting the rendering process.
   double* GetBounds() VTK_SIZEHINT(6) override;
   void GetActors(vtkPropCollection* pc) override;
   void ReleaseGraphicsResources(vtkWindow*) override;
@@ -90,34 +86,32 @@ public:
     Inside
   };
 
-  /**
-   * Set the QWidget this representation will render
-   */
+  /// Set the QWidget this representation will render
   void SetWidget(QWidget* w);
 
-  /**
-   * Get the QWidgetTexture used by the representation
-   */
+  /// Get the QWidgetTexture used by the representation
   vtkGetObjectMacro(QWidgetTexture, vtkSlicerQWidgetTexture);
 
-  /**
-   * Get the vtkPlaneSouce used by this representation. This can be useful
-   * to set the Origin, Point1, Point2 of the plane source directly.
-   */
+  /// Get the vtkPlaneSouce used by this representation. This can be useful
+  /// to set the Origin, Point1, Point2 of the plane source directly.
   vtkGetObjectMacro(PlaneSource, vtkPlaneSource);
 
-  /**
-   * Get the widget coordinates as computed in the last call to
-   * ComputeComplexInteractionState.
-   */
-  vtkGetVector2Macro(WidgetCoordinates, int);
+  /// Get the widget coordinates as computed in the last call to
+  /// ComputeComplexInteractionState.
+  //vtkGetVector2Macro(WidgetCoordinates, int);
+   
+  /// Get spacing of the widget (mm/pixel)
+  vtkGetMacro(SpacingMmPerPixel, double);
+  /// Set spacing of the widget (mm/pixel)
+  vtkSetMacro(SpacingMmPerPixel, double);
 
 protected:
   /// Callback function observing texture modified events.
   static void OnTextureModified(vtkObject* caller, unsigned long eid, void* clientData, void* callData);
 
 protected:
-  int WidgetCoordinates[2];
+  //int WidgetCoordinates[2];
+  double SpacingMmPerPixel{0.5};
 
   vtkPlaneSource* PlaneSource;
   vtkPolyDataMapper* PlaneMapper;

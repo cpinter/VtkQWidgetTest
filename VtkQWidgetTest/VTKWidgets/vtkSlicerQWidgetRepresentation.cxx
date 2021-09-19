@@ -230,9 +230,9 @@ void vtkSlicerQWidgetRepresentation::OnTextureModified(
     return;
   }
   double bounds[6] = {
-    -(double)(rect.width()/2), (double)rect.width()/2,
+    -(double)(rect.width()/2)*self->SpacingMmPerPixel, (double)rect.width()/2*self->SpacingMmPerPixel,
     -0.5, 0.5,
-    -(double)(rect.height()/2), (double)rect.height()/2
+    -(double)(rect.height()/2)*self->SpacingMmPerPixel, (double)rect.height()/2*self->SpacingMmPerPixel
   };
   self->PlaceWidget(bounds);
 }
