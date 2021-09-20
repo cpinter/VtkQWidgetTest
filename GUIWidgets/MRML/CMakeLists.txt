@@ -11,6 +11,7 @@ set(${KIT}_INCLUDE_DIRECTORIES
 
 set(${KIT}_SRCS
   vtkMRMLGUIWidgetNode.cxx
+  vtkMRMLGUIWidgetDisplayNode.cxx
   )
 
 set(${KIT}_TARGET_LIBRARIES

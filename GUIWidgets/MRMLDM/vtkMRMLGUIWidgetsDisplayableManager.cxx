@@ -79,7 +79,7 @@ typedef void (*fp)();
 #define NUMERIC_ZERO 0.001
 
 //---------------------------------------------------------------------------
-vtkStandardNewMacro (vtkMRMLGUIWidgetsDisplayableManager);
+vtkStandardNewMacro(vtkMRMLGUIWidgetsDisplayableManager);
 
 //---------------------------------------------------------------------------
 // vtkMRMLGUIWidgetsDisplayableManager methods

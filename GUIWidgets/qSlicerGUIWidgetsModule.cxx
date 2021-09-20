@@ -27,6 +27,13 @@
 #include "qSlicerGUIWidgetsModule.h"
 #include "qSlicerGUIWidgetsModuleWidget.h"
 
+// MRMLDisplayableManager includes
+#include <vtkMRMLThreeDViewDisplayableManagerFactory.h>
+
+// DisplayableManager initialization
+#include <vtkAutoInit.h>
+VTK_MODULE_INIT(vtkSlicerGUIWidgetsModuleMRMLDisplayableManager);
+
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_ExtensionTemplate
 class qSlicerGUIWidgetsModulePrivate
@@ -102,11 +109,13 @@ QStringList qSlicerGUIWidgetsModule::dependencies() const
 void qSlicerGUIWidgetsModule::setup()
 {
   this->Superclass::setup();
+
+  // Register displayable managers (same displayable manager handles both slice and 3D views)
+  vtkMRMLThreeDViewDisplayableManagerFactory::GetInstance()->RegisterDisplayableManager("vtkMRMLGUIWidgetsDisplayableManager");
 }
 
 //-----------------------------------------------------------------------------
-qSlicerAbstractModuleRepresentation* qSlicerGUIWidgetsModule
-::createWidgetRepresentation()
+qSlicerAbstractModuleRepresentation* qSlicerGUIWidgetsModule::createWidgetRepresentation()
 {
   return new qSlicerGUIWidgetsModuleWidget;
 }
