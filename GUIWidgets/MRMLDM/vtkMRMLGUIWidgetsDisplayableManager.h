@@ -37,14 +37,14 @@
 // STD includes
 #include <map>
 
-class vtkMRMLGUIWidgetsNode;
+class vtkMRMLGUIWidgetNode;
 class vtkSlicerViewerWidget;
-class vtkMRMLGUIWidgetsDisplayNode;
+class vtkMRMLGUIWidgetDisplayNode;
 class vtkAbstractWidget;
 
 /// \ingroup Slicer_QtModules_GUIWidgets
-class  VTK_SLICER_GUIWIDGETS_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLGUIWidgetsDisplayableManager :
-    public vtkMRMLAbstractDisplayableManager
+class  VTK_SLICER_GUIWIDGETS_MODULE_MRMLDISPLAYABLEMANAGER_EXPORT vtkMRMLGUIWidgetsDisplayableManager
+  : public vtkMRMLAbstractDisplayableManager
 {
 public:
 
@@ -97,7 +97,7 @@ protected:
   ~vtkMRMLGUIWidgetsDisplayableManager() override;
   /*
   vtkSlicerMarkupsWidget* FindClosestWidget(vtkMRMLInteractionEventData *callData, double &closestDistance2);
-
+  */
   void ProcessMRMLNodesEvents(vtkObject *caller, unsigned long event, void *callData) override;
 
   /// Wrap the superclass render request in a check for batch processing
@@ -118,11 +118,11 @@ protected:
   void OnMRMLSceneNodeRemoved(vtkMRMLNode* node) override;
 
   /// Create a widget.
-  vtkSlicerMarkupsWidget* CreateWidget(vtkMRMLMarkupsDisplayNode* node);
+  vtkSlicerQWidgetWidget* CreateWidget(vtkMRMLGUIWidgetDisplayNode* node);
 
   /// Called after the corresponding MRML View container was modified
   void OnMRMLDisplayableNodeModifiedEvent(vtkObject* caller) override;
-
+  /*
   /// Handler for specific SliceView actions, iterate over the widgets in the helper
   virtual void OnMRMLSliceNodeModifiedEvent();
 
@@ -168,6 +168,10 @@ private:
   // must be set when it's assigned to a viewer
   vtkWeakPointer<vtkMRMLSliceNode> SliceNode;
   */
+
+  class vtkInternal;
+  vtkInternal* Internal;
+  friend class vtkInternal;
 };
 
 #endif

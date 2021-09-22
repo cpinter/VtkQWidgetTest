@@ -50,6 +50,7 @@ public:
 
 public slots:
   QWidget* addHelloWorldSlicerClicked();
+  void addHelloWorldNodeClicked();
 
 protected:
   QScopedPointer<qSlicerGUIWidgetsModuleWidgetPrivate> d_ptr;

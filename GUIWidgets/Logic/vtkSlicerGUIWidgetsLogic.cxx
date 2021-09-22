@@ -18,6 +18,8 @@
 // GUIWidgets Logic includes
 #include "vtkSlicerGUIWidgetsLogic.h"
 
+#include "vtkMRMLGUIWidgetNode.h"
+
 // MRML includes
 #include <vtkMRMLScene.h>
 
@@ -61,7 +63,16 @@ void vtkSlicerGUIWidgetsLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene)
 //-----------------------------------------------------------------------------
 void vtkSlicerGUIWidgetsLogic::RegisterNodes()
 {
-  assert(this->GetMRMLScene() != 0);
+  vtkMRMLScene* scene = this->GetMRMLScene(); 
+  if (!scene)
+  {
+    vtkErrorMacro("RegisterNodes: Invalid MRML scene");
+    return;
+  }
+  if (!scene->IsNodeClassRegistered("vtkMRMLGUIWidgetNode"))
+  {
+    scene->RegisterNodeClass(vtkSmartPointer<vtkMRMLGUIWidgetNode>::New());
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -71,13 +82,11 @@ void vtkSlicerGUIWidgetsLogic::UpdateFromMRMLScene()
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerGUIWidgetsLogic
-::OnMRMLSceneNodeAdded(vtkMRMLNode* vtkNotUsed(node))
+void vtkSlicerGUIWidgetsLogic::OnMRMLSceneNodeAdded(vtkMRMLNode* vtkNotUsed(node))
 {
 }
 
 //---------------------------------------------------------------------------
-void vtkSlicerGUIWidgetsLogic
-::OnMRMLSceneNodeRemoved(vtkMRMLNode* vtkNotUsed(node))
+void vtkSlicerGUIWidgetsLogic::OnMRMLSceneNodeRemoved(vtkMRMLNode* vtkNotUsed(node))
 {
 }

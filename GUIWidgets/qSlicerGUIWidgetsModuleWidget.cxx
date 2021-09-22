@@ -27,6 +27,8 @@
 #include "qSlicerGUIWidgetsModuleWidget.h"
 #include "ui_qSlicerGUIWidgetsModuleWidget.h"
 
+#include "vtkMRMLGUIWidgetNode.h"
+
 #include "vtkSlicerQWidgetRepresentation.h"
 #include "vtkSlicerQWidgetWidget.h"
 
@@ -38,13 +40,10 @@
 #include "qMRMLThreeDWidget.h"
 
 // MRML includes
+#include "vtkMRMLScene.h"
 #include "vtkMRMLViewNode.h"
 
 // VTK includes
-#include "Testing/Cxx/TestQtCommon.h"
-#include "vtkPlaneSource.h"
-#include "vtkQWidgetRepresentation.h"
-#include "vtkQWidgetWidget.h"
 #include "vtkRenderer.h"
 
 //-----------------------------------------------------------------------------
@@ -87,6 +86,7 @@ void qSlicerGUIWidgetsModuleWidget::setup()
   this->Superclass::setup();
 
   QObject::connect(d->AddHelloWorldWidgetButton_Slicer, SIGNAL(clicked()), this, SLOT(addHelloWorldSlicerClicked()));
+  QObject::connect(d->AddHelloWorldGUIWidgetNodeButton, SIGNAL(clicked()), this, SLOT(addHelloWorldNodeClicked()));
 }
 
 //-----------------------------------------------------------------------------
@@ -94,7 +94,7 @@ QWidget* qSlicerGUIWidgetsModuleWidget::addHelloWorldSlicerClicked()
 {
   Q_D(qSlicerGUIWidgetsModuleWidget);
 
-  qSlicerApplication * app = qSlicerApplication::application();
+  qSlicerApplication* app = qSlicerApplication::application();
   if (!app || !app->layoutManager())
   {
     qCritical() << Q_FUNC_INFO << ": Failed to access layout manager";
@@ -111,4 +111,13 @@ QWidget* qSlicerGUIWidgetsModuleWidget::addHelloWorldSlicerClicked()
   this->SlicerQWidgetWidget->CreateDefaultRepresentation(viewNode, activeRenderer);
 
   return this->Widget;
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerGUIWidgetsModuleWidget::addHelloWorldNodeClicked()
+{
+  qSlicerApplication* app = qSlicerApplication::application();
+
+  vtkMRMLGUIWidgetNode* widgetNode = vtkMRMLGUIWidgetNode::SafeDownCast(
+    app->mrmlScene()->AddNewNodeByClass("vtkMRMLGUIWidgetNode") );
 }
