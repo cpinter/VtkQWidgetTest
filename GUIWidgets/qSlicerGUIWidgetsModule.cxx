@@ -20,19 +20,34 @@
 
 ==============================================================================*/
 
+// GUIWidgets MRML includes
+#include <vtkMRMLGUIWidgetNode.h>
+
 // GUIWidgets Logic includes
 #include <vtkSlicerGUIWidgetsLogic.h>
+
+// GUIWidgets VTKWidgets includes
+#include <vtkSlicerQWidgetWidget.h>
 
 // GUIWidgets includes
 #include "qSlicerGUIWidgetsModule.h"
 #include "qSlicerGUIWidgetsModuleWidget.h"
 
+// Markups Logic includes
+#include <vtkSlicerMarkupsLogic.h>
+
+// Markups Widgets includes
+#include "qSlicerMarkupsAdditionalOptionsWidgetsFactory.h" 
+
 // MRMLDisplayableManager includes
-#include <vtkMRMLThreeDViewDisplayableManagerFactory.h>
+//#include <vtkMRMLThreeDViewDisplayableManagerFactory.h>
 
 // DisplayableManager initialization
-#include <vtkAutoInit.h>
-VTK_MODULE_INIT(vtkSlicerGUIWidgetsModuleMRMLDisplayableManager);
+//#include <vtkAutoInit.h>
+//VTK_MODULE_INIT(vtkSlicerGUIWidgetsModuleMRMLDisplayableManager);
+
+// Qt includes
+#include <QDebug>
 
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_ExtensionTemplate
@@ -102,7 +117,7 @@ QStringList qSlicerGUIWidgetsModule::categories() const
 //-----------------------------------------------------------------------------
 QStringList qSlicerGUIWidgetsModule::dependencies() const
 {
-  return QStringList();
+  return QStringList() << "Markups";
 }
 
 //-----------------------------------------------------------------------------
@@ -111,7 +126,29 @@ void qSlicerGUIWidgetsModule::setup()
   this->Superclass::setup();
 
   // Register displayable managers (same displayable manager handles both slice and 3D views)
-  vtkMRMLThreeDViewDisplayableManagerFactory::GetInstance()->RegisterDisplayableManager("vtkMRMLGUIWidgetsDisplayableManager");
+  //TODO: We do not register it because since the MRML node is a subclass of the plane markup, the markups DM takes over
+  //vtkMRMLThreeDViewDisplayableManagerFactory::GetInstance()->RegisterDisplayableManager("vtkMRMLGUIWidgetsDisplayableManager");
+
+  // Register markups
+  vtkSlicerApplicationLogic* appLogic = this->appLogic();
+  if (!appLogic)
+  {
+    qCritical() << Q_FUNC_INFO << " : invalid application logic.";
+    return;
+  }
+  vtkSlicerMarkupsLogic* markupsLogic = vtkSlicerMarkupsLogic::SafeDownCast(appLogic->GetModuleLogic("Markups"));
+  if (!markupsLogic)
+  {
+    qCritical() << Q_FUNC_INFO << " : invalid markups logic.";
+    return;
+  }
+  vtkNew<vtkMRMLGUIWidgetNode> guiWidgetNode;
+  vtkNew<vtkSlicerQWidgetWidget> vtkQWidgetWidget;
+  markupsLogic->RegisterMarkupsNode(guiWidgetNode, vtkQWidgetWidget);
+
+  // Create and configure the additional widgets
+  //auto optionsWidgetFactory = qSlicerMarkupsAdditionalOptionsWidgetsFactory::instance();
+  //optionsWidgetFactory->registerAdditionalOptionsWidget(new qSlicerMarkupsGUIWidget()); 
 }
 
 //-----------------------------------------------------------------------------

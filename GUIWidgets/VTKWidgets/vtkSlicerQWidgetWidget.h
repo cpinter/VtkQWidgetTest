@@ -35,36 +35,34 @@
 
 #include "vtkSlicerGUIWidgetsModuleVTKWidgetsExport.h"
 
-#include "vtkMRMLAbstractWidget.h"
+#include "vtkSlicerMarkupsWidget.h"
 
-#include <QPointF>                 // for ivar
+// Qt includes
+#include <QPointF>
 
 class QWidget;
 class vtkSlicerQWidgetRepresentation;
 
-class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetWidget : public vtkMRMLAbstractWidget
+class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetWidget : public vtkSlicerMarkupsWidget
 {
   friend class vtkInteractionCallback;
 
 public:
-  /**
-   * Instantiate the object.
-   */
+  /// Instantiate the object.
   static vtkSlicerQWidgetWidget* New();
 
   ///@{
-  /**
-   * Standard vtkObject methods
-   */
-  vtkTypeMacro(vtkSlicerQWidgetWidget, vtkMRMLAbstractWidget);
+  /// Standard vtkObject methods
+  vtkTypeMacro(vtkSlicerQWidgetWidget, vtkSlicerMarkupsWidget);
   void PrintSelf(ostream& os, vtkIndent indent) override;
   ///@}
 
-  /**
-   * Specify an instance of vtkSlicerQWidgetRepresentation used to represent this
-   * widget in the scene. Note that the representation is a subclass of vtkProp
-   * so it can be added to the renderer independent of the widget.
-   */
+  /// Create instance of the markups widget
+  vtkSlicerMarkupsWidget* CreateInstance() const override;
+
+  /// Specify an instance of vtkSlicerQWidgetRepresentation used to represent this
+  /// widget in the scene. Note that the representation is a subclass of vtkProp
+  /// so it can be added to the renderer independent of the widget.
   void SetRepresentation(vtkMRMLAbstractWidgetRepresentation *r) override;
 
   // Description:
@@ -72,22 +70,14 @@ public:
   // Unobserved the camera if the widget is disabled.
   //void SetEnabled(int enabling) override;
 
-  /**
-   * Return the representation as a vtkSlicerQWidgetRepresentation
-   */
+  /// Return the representation as a vtkSlicerQWidgetRepresentation
   vtkSlicerQWidgetRepresentation* GetQWidgetRepresentation();
 
-  /**
-   * Create the default widget representation if one is not set.
-   */
-  //void CreateDefaultRepresentation();
-
   /// Create the default widget representation and initializes the widget and representation.
-  void CreateDefaultRepresentation(vtkMRMLAbstractViewNode* viewNode, vtkRenderer* renderer);
+  void CreateDefaultRepresentation(
+    vtkMRMLMarkupsDisplayNode* markupsDisplayNode, vtkMRMLAbstractViewNode* viewNode, vtkRenderer* renderer) override;
 
-  /**
-   * Set the QWidget that will receive the events.
-   */
+  /// Set the QWidget that will receive the events.
   void SetWidget(QWidget* w);
 
 protected:

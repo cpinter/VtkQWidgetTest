@@ -108,7 +108,7 @@ QWidget* qSlicerGUIWidgetsModuleWidget::addHelloWorldSlicerClicked()
   qMRMLThreeDView* threeDView = app->layoutManager()->threeDWidget(0)->threeDView();
   vtkRenderer* activeRenderer = app->layoutManager()->activeThreeDRenderer();
   vtkMRMLViewNode* viewNode = threeDView->mrmlViewNode();
-  this->SlicerQWidgetWidget->CreateDefaultRepresentation(viewNode, activeRenderer);
+  this->SlicerQWidgetWidget->CreateDefaultRepresentation(nullptr, viewNode, activeRenderer);
 
   return this->Widget;
 }

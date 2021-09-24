@@ -25,12 +25,14 @@
 #include "vtkSlicerQWidgetRepresentation.h"
 #include "vtkSlicerQWidgetTexture.h"
 
+// Qt includes
 #include <QMouseEvent>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QGraphicsScene>
-#include <QtWidgets/QGraphicsSceneMouseEvent>
-#include <QtWidgets/QWidget>
+#include <QApplication>
+#include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
+#include <QWidget>
 
+// VTK includes
 #include "vtkCallbackCommand.h"
 // #include "vtkCommand.h"
 #include "vtkEvent.h"
@@ -61,6 +63,22 @@ vtkSlicerQWidgetRepresentation* vtkSlicerQWidgetWidget::GetQWidgetRepresentation
 }
 
 //------------------------------------------------------------------------------
+vtkSlicerMarkupsWidget* vtkSlicerQWidgetWidget::CreateInstance()const
+{
+  vtkObject* ret = vtkObjectFactory::CreateInstance("vtkSlicerQWidgetWidget");
+  if(ret)
+  {
+    return static_cast<vtkSlicerQWidgetWidget*>(ret);
+  }
+
+  vtkSlicerQWidgetWidget* result = new vtkSlicerQWidgetWidget;
+#ifdef VTK_HAS_INITIALIZE_OBJECT_BASE
+  result->InitializeObjectBase();
+#endif
+  return result;
+}
+
+//------------------------------------------------------------------------------
 void vtkSlicerQWidgetWidget::SetWidget(QWidget* w)
 {
   if (this->Widget == w)
@@ -77,7 +95,8 @@ void vtkSlicerQWidgetWidget::SetWidget(QWidget* w)
 }
 
 //----------------------------------------------------------------------
-void vtkSlicerQWidgetWidget::CreateDefaultRepresentation(vtkMRMLAbstractViewNode* viewNode, vtkRenderer* renderer)
+void vtkSlicerQWidgetWidget::CreateDefaultRepresentation(
+  vtkMRMLMarkupsDisplayNode* markupsDisplayNode, vtkMRMLAbstractViewNode* viewNode, vtkRenderer* renderer)
 {
   vtkNew<vtkSlicerQWidgetRepresentation> rep;
   this->SetRenderer(renderer);
