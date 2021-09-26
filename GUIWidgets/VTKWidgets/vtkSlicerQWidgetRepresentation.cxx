@@ -24,6 +24,10 @@
 
 #include "vtkSlicerQWidgetTexture.h"
 
+// GUI Widget includes
+#include "vtkMRMLGUIWidgetNode.h"
+#include "vtkMRMLGUIWidgetDisplayNode.h"
+
 // VTK includes
 #include <vtkActor.h>
 #include <vtkCallbackCommand.h>
@@ -204,6 +208,19 @@ void vtkSlicerQWidgetRepresentation::UpdateFromMRML(vtkMRMLNode* caller, unsigne
   Superclass::UpdateFromMRML(caller, event, callData);
 
   this->NeedToRenderOn();
+
+  vtkMRMLGUIWidgetNode* guiWidgetNode = vtkMRMLGUIWidgetNode::SafeDownCast(this->GetMarkupsNode());
+  vtkMRMLGUIWidgetDisplayNode* displayNode = vtkMRMLGUIWidgetDisplayNode::SafeDownCast(this->GetMarkupsDisplayNode());
+  if (!guiWidgetNode || !this->IsDisplayable() || !displayNode)
+  {
+    this->VisibilityOff();
+    return;
+  }
+
+  if (guiWidgetNode->GetWidget() != this->QWidgetTexture->GetWidget())
+  {
+    this->QWidgetTexture->SetWidget(guiWidgetNode->GetWidget());
+  }
 
   if (!this->QWidgetTexture->GetWidget() || !this->ViewNode)
   {

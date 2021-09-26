@@ -22,6 +22,8 @@
 
 #include "vtkSlicerQWidgetWidget.h"
 
+#include "vtkMRMLGUIWidgetNode.h"
+
 #include "vtkSlicerQWidgetRepresentation.h"
 #include "vtkSlicerQWidgetTexture.h"
 
@@ -101,8 +103,17 @@ void vtkSlicerQWidgetWidget::CreateDefaultRepresentation(
   vtkNew<vtkSlicerQWidgetRepresentation> rep;
   this->SetRenderer(renderer);
   this->SetRepresentation(rep);
+  rep->SetMarkupsDisplayNode(markupsDisplayNode);
   rep->SetWidget(this->Widget);
   rep->SetViewNode(viewNode);
+
+  // Set widget from markups node when creating the representation
+  vtkMRMLGUIWidgetNode* guiWidgetNode = vtkMRMLGUIWidgetNode::SafeDownCast(markupsDisplayNode->GetDisplayableNode());
+  if (guiWidgetNode)
+  {
+    this->SetWidget(guiWidgetNode->GetWidget());
+  }
+
   rep->UpdateFromMRML(nullptr, 0); // full update
 }
 

@@ -18,10 +18,16 @@
 // GUIWidgets Logic includes
 #include "vtkSlicerGUIWidgetsLogic.h"
 
+// GUIWidgets MRML includes
 #include "vtkMRMLGUIWidgetNode.h"
+#include "vtkMRMLGUIWidgetDisplayNode.h"
 
 // MRML includes
 #include <vtkMRMLScene.h>
+#include <vtkMRMLSelectionNode.h>
+
+// Markups logic includes
+#include <vtkSlicerMarkupsLogic.h>
 
 // VTK includes
 #include <vtkIntArray.h>
@@ -60,6 +66,47 @@ void vtkSlicerGUIWidgetsLogic::SetMRMLSceneInternal(vtkMRMLScene * newScene)
   this->SetAndObserveMRMLSceneEventsInternal(newScene, events.GetPointer());
 }
 
+//---------------------------------------------------------------------------
+void vtkSlicerGUIWidgetsLogic::ObserveMRMLScene()
+{
+  if (!this->GetMRMLScene())
+  {
+    return;
+  }
+
+  vtkMRMLApplicationLogic* mrmlAppLogic = this->GetMRMLApplicationLogic();
+  if (!mrmlAppLogic)
+  {
+    vtkErrorMacro("ObserveMRMLScene: invalid MRML Application Logic");
+    return;
+  }
+
+  vtkMRMLNode* node = this->GetMRMLScene()->GetNodeByID(this->GetSelectionNodeID().c_str());
+  if (!node)
+  {
+    vtkErrorMacro("Observe MRMLScene: invalid Selection Node");
+    return;
+  }
+
+  // add known markup types to the selection node
+  vtkMRMLSelectionNode* selectionNode = vtkMRMLSelectionNode::SafeDownCast(node);
+  if (selectionNode)
+  {
+    // got into batch process mode so that an update on the mouse mode tool
+    // bar is triggered when leave it
+    this->GetMRMLScene()->StartState(vtkMRMLScene::BatchProcessState);
+
+    auto guiWidgetNode = vtkSmartPointer<vtkMRMLGUIWidgetNode>::New();
+    selectionNode->AddNewPlaceNodeClassNameToList(
+      guiWidgetNode->GetClassName(), guiWidgetNode->GetAddIcon(), guiWidgetNode->GetMarkupType());
+
+    // trigger an update on the mouse mode toolbar
+    this->GetMRMLScene()->EndState(vtkMRMLScene::BatchProcessState);
+  }
+
+ this->Superclass::ObserveMRMLScene();
+}
+
 //-----------------------------------------------------------------------------
 void vtkSlicerGUIWidgetsLogic::RegisterNodes()
 {
@@ -72,6 +119,10 @@ void vtkSlicerGUIWidgetsLogic::RegisterNodes()
   if (!scene->IsNodeClassRegistered("vtkMRMLGUIWidgetNode"))
   {
     scene->RegisterNodeClass(vtkSmartPointer<vtkMRMLGUIWidgetNode>::New());
+  }
+  if (!scene->IsNodeClassRegistered("vtkMRMLGUIWidgetDisplayNode"))
+  {
+    scene->RegisterNodeClass(vtkSmartPointer<vtkMRMLGUIWidgetDisplayNode>::New());
   }
 }
 

@@ -20,9 +20,11 @@
 
 ==============================================================================*/
 
-// MRML includes
-#include "vtkMRMLMarkupsDisplayNode.h"
+// GUI Widgets includes
 #include "vtkMRMLGUIWidgetNode.h"
+#include "vtkMRMLGUIWidgetDisplayNode.h"
+
+// MRML includes
 #include "vtkMRMLMeasurementArea.h"
 #include "vtkMRMLScene.h"
 #include "vtkMRMLStorageNode.h"
@@ -100,4 +102,27 @@ void vtkMRMLGUIWidgetNode::PrintSelf(ostream& os, vtkIndent indent)
   //vtkMRMLPrintFloatMacro(AutoSizeScalingFactor);
   //vtkMRMLPrintMatrix4x4Macro(ObjectToBaseMatrix);
   //vtkMRMLPrintEndMacro();
+}
+
+//----------------------------------------------------------------------------
+void vtkMRMLGUIWidgetNode::CreateDefaultDisplayNodes()
+{
+  if (this->GetDisplayNode() != nullptr && vtkMRMLGUIWidgetDisplayNode::SafeDownCast(this->GetDisplayNode()) != nullptr)
+  {
+    // Display node already exists
+    return;
+  }
+  if (this->GetScene() == nullptr)
+  {
+    vtkErrorMacro("vtkMRMLGUIWidgetNode::CreateDefaultDisplayNodes failed: scene is invalid");
+    return;
+  }
+  vtkMRMLGUIWidgetDisplayNode* displayNode = vtkMRMLGUIWidgetDisplayNode::SafeDownCast(
+    this->GetScene()->AddNewNodeByClass("vtkMRMLGUIWidgetDisplayNode"));
+  if (!displayNode)
+  {
+    vtkErrorMacro("vtkMRMLGUIWidgetNode::CreateDefaultDisplayNodes failed: scene failed to instantiate a vtkMRMLGUIWidgetDisplayNode node");
+    return;
+  }
+  this->SetAndObserveDisplayNodeID(displayNode->GetID());
 }

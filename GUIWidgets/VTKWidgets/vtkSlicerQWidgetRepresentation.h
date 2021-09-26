@@ -35,7 +35,7 @@
 
 #include "vtkSlicerGUIWidgetsModuleVTKWidgetsExport.h"
 
-#include "vtkMRMLAbstractWidgetRepresentation.h"
+#include "vtkSlicerMarkupsWidgetRepresentation3D.h"
 
 class QWidget;
 
@@ -47,7 +47,7 @@ class vtkPolyDataAlgorithm;
 class vtkPolyDataMapper;
 class vtkSlicerQWidgetTexture;
 
-class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetRepresentation : public vtkMRMLAbstractWidgetRepresentation
+class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetRepresentation : public vtkSlicerMarkupsWidgetRepresentation3D
 {
 public:
   /**
@@ -57,7 +57,7 @@ public:
 
   ///@{
   /// Standard methods for the class.
-  vtkTypeMacro(vtkSlicerQWidgetRepresentation, vtkMRMLAbstractWidgetRepresentation);
+  vtkTypeMacro(vtkSlicerQWidgetRepresentation, vtkSlicerMarkupsWidgetRepresentation3D);
   void PrintSelf(ostream& os, vtkIndent indent) override;
   ///@}
 

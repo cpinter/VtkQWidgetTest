@@ -28,6 +28,9 @@
 // Markups includes
 #include "vtkMRMLMarkupsPlaneNode.h"
 
+// Qt includes //TODO: Maybe set the widget to the module instance and have handles here
+class QWidget;
+
 /// \brief MRML node to represent a planar GUI widget displayable in the 3D view
 class  VTK_SLICER_GUIWIDGETS_MODULE_MRML_EXPORT vtkMRMLGUIWidgetNode : public vtkMRMLMarkupsPlaneNode
 {
@@ -60,6 +63,18 @@ public:
   /// Copy node content (excludes basic data, such as name and node references).
   /// \sa vtkMRMLNode::CopyContent
   vtkMRMLCopyContentMacro(vtkMRMLGUIWidgetNode);
+
+  /// Create default storage node or nullptr if does not have one
+  void CreateDefaultDisplayNodes() override;
+
+public:
+  /// Set the QWidget that will receive the events.
+  void SetWidget(QWidget* w);
+  /// Get the QWidget
+  QWidget* GetWidget() { return this->Widget; };
+
+protected:
+  QWidget* Widget{nullptr};
 
 protected:
   vtkMRMLGUIWidgetNode();

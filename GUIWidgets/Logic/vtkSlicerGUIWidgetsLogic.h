@@ -25,31 +25,30 @@
 #define __vtkSlicerGUIWidgetsLogic_h
 
 // Slicer includes
-#include "vtkSlicerModuleLogic.h"
+#include <vtkSlicerMarkupsLogic.h>
 
 // MRML includes
 
-// STD includes
-#include <cstdlib>
-
 #include "vtkSlicerGUIWidgetsModuleLogicExport.h"
-
 
 /// \ingroup Slicer_QtModules_ExtensionTemplate
 class VTK_SLICER_GUIWIDGETS_MODULE_LOGIC_EXPORT vtkSlicerGUIWidgetsLogic :
-  public vtkSlicerModuleLogic
+  public vtkSlicerMarkupsLogic
 {
 public:
 
   static vtkSlicerGUIWidgetsLogic *New();
-  vtkTypeMacro(vtkSlicerGUIWidgetsLogic, vtkSlicerModuleLogic);
+  vtkTypeMacro(vtkSlicerGUIWidgetsLogic, vtkSlicerMarkupsLogic);
   void PrintSelf(ostream& os, vtkIndent indent);
 
 protected:
   vtkSlicerGUIWidgetsLogic();
   virtual ~vtkSlicerGUIWidgetsLogic();
 
+  /// Initialize listening to MRML events
   virtual void SetMRMLSceneInternal(vtkMRMLScene* newScene);
+  void ObserveMRMLScene() override;
+
   /// Register MRML Node classes to Scene. Gets called automatically when the MRMLScene is attached to this logic class.
   virtual void RegisterNodes();
   virtual void UpdateFromMRMLScene();
