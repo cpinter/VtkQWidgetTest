@@ -217,10 +217,11 @@ void vtkSlicerQWidgetRepresentation::UpdateFromMRML(vtkMRMLNode* caller, unsigne
     return;
   }
 
-  if (guiWidgetNode->GetWidget() != this->QWidgetTexture->GetWidget())
-  {
-    this->QWidgetTexture->SetWidget(guiWidgetNode->GetWidget());
-  }
+  //TODO: Reinstate if figured out how widget can be set from outside
+  //if (guiWidgetNode->GetWidget() != this->QWidgetTexture->GetWidget())
+  //{
+  //  this->QWidgetTexture->SetWidget(guiWidgetNode->GetWidget());
+  //}
 
   if (!this->QWidgetTexture->GetWidget() || !this->ViewNode)
   {
@@ -241,6 +242,11 @@ void vtkSlicerQWidgetRepresentation::OnTextureModified(
 
   // Redefine widget plane
   QWidget* widget = self->QWidgetTexture->GetWidget();
+  if (!widget)
+  {
+    return;
+  }
+
   QRect rect = widget->geometry();
   if (rect.width() < 2 || rect.height() < 2)
   {

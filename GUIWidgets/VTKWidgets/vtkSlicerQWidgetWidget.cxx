@@ -27,11 +27,15 @@
 #include "vtkSlicerQWidgetRepresentation.h"
 #include "vtkSlicerQWidgetTexture.h"
 
+// MRML includes
+#include "vtkMRMLSliceNode.h"
+
 // Qt includes
 #include <QMouseEvent>
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QPushButton>
 #include <QWidget>
 
 // VTK includes
@@ -100,19 +104,33 @@ void vtkSlicerQWidgetWidget::SetWidget(QWidget* w)
 void vtkSlicerQWidgetWidget::CreateDefaultRepresentation(
   vtkMRMLMarkupsDisplayNode* markupsDisplayNode, vtkMRMLAbstractViewNode* viewNode, vtkRenderer* renderer)
 {
+  if (vtkMRMLSliceNode::SafeDownCast(viewNode))
+  {
+    // There is no 2D representation of the GUI widget
+    return;
+  }
+
   vtkNew<vtkSlicerQWidgetRepresentation> rep;
   this->SetRenderer(renderer);
   this->SetRepresentation(rep);
   rep->SetMarkupsDisplayNode(markupsDisplayNode);
-  rep->SetWidget(this->Widget);
   rep->SetViewNode(viewNode);
 
   // Set widget from markups node when creating the representation
   vtkMRMLGUIWidgetNode* guiWidgetNode = vtkMRMLGUIWidgetNode::SafeDownCast(markupsDisplayNode->GetDisplayableNode());
   if (guiWidgetNode)
   {
-    this->SetWidget(guiWidgetNode->GetWidget());
+    if (guiWidgetNode->GetWidget())
+    {
+      this->SetWidget(guiWidgetNode->GetWidget());
+    }
+    else
+    {
+      QPushButton* defaultWidget = new QPushButton("Hello world!");
+      this->SetWidget(defaultWidget);
+    }
   }
+  rep->SetWidget(this->Widget); //TODO: Not needed (unless Modified maybe?), the widget comes from elsewhere
 
   rep->UpdateFromMRML(nullptr, 0); // full update
 }

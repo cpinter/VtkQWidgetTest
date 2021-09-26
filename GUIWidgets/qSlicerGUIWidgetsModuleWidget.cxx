@@ -28,6 +28,7 @@
 #include "ui_qSlicerGUIWidgetsModuleWidget.h"
 
 #include "vtkMRMLGUIWidgetNode.h"
+#include "vtkMRMLGUIWidgetDisplayNode.h"
 
 #include "vtkSlicerQWidgetRepresentation.h"
 #include "vtkSlicerQWidgetWidget.h"
@@ -105,10 +106,13 @@ QWidget* qSlicerGUIWidgetsModuleWidget::addHelloWorldSlicerClicked()
   this->SlicerQWidgetWidget = vtkSmartPointer<vtkSlicerQWidgetWidget>::New();
   this->SlicerQWidgetWidget->SetWidget(this->Widget);
 
-  qMRMLThreeDView* threeDView = app->layoutManager()->threeDWidget(0)->threeDView();
-  vtkRenderer* activeRenderer = app->layoutManager()->activeThreeDRenderer();
+  qMRMLLayoutManager* layoutManager = app->layoutManager();
+  qMRMLThreeDView* threeDView = layoutManager->threeDWidget(0)->threeDView();
+  vtkRenderer* activeRenderer = layoutManager->activeThreeDRenderer();
   vtkMRMLViewNode* viewNode = threeDView->mrmlViewNode();
-  this->SlicerQWidgetWidget->CreateDefaultRepresentation(nullptr, viewNode, activeRenderer);
+  vtkMRMLGUIWidgetDisplayNode* displayNode = vtkMRMLGUIWidgetDisplayNode::SafeDownCast(
+    app->mrmlScene()->AddNewNodeByClass("vtkMRMLGUIWidgetDisplayNode") );
+  this->SlicerQWidgetWidget->CreateDefaultRepresentation(displayNode, viewNode, activeRenderer);
 
   return this->Widget;
 }
@@ -120,4 +124,7 @@ void qSlicerGUIWidgetsModuleWidget::addHelloWorldNodeClicked()
 
   vtkMRMLGUIWidgetNode* widgetNode = vtkMRMLGUIWidgetNode::SafeDownCast(
     app->mrmlScene()->AddNewNodeByClass("vtkMRMLGUIWidgetNode") );
+
+  this->Widget = new QPushButton("Hello world!");
+  // widgetNode->SetWidget(this->Widget); //TODO: Doesn't link. Including QT stuff in target libraries doesn't help
 }
