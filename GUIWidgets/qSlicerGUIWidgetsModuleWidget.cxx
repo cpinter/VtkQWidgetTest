@@ -77,6 +77,7 @@ qSlicerGUIWidgetsModuleWidget::qSlicerGUIWidgetsModuleWidget(QWidget* _parent)
 //-----------------------------------------------------------------------------
 qSlicerGUIWidgetsModuleWidget::~qSlicerGUIWidgetsModuleWidget()
 {
+  this->GUIWidgetsMap.clear();
 }
 
 //-----------------------------------------------------------------------------
@@ -98,10 +99,11 @@ QWidget* qSlicerGUIWidgetsModuleWidget::addHelloWorldNodeClicked()
   vtkMRMLGUIWidgetNode* widgetNode = vtkMRMLGUIWidgetNode::SafeDownCast(
     app->mrmlScene()->AddNewNodeByClass("vtkMRMLGUIWidgetNode") );
 
-  this->Widget = new QPushButton("Hello world!");
-  widgetNode->SetWidget((void*)this->Widget);
+  QPushButton* newButton = new QPushButton("Hello world!");
+  
+  this->setWidgetToGUIWidgetMarkupsNode(widgetNode, newButton);
 
-  return this->Widget;
+  return newButton;
 }
 
 //-----------------------------------------------------------------------------
@@ -109,7 +111,10 @@ void qSlicerGUIWidgetsModuleWidget::updateButtonLabelButtonClicked()
 {
   Q_D(qSlicerGUIWidgetsModuleWidget);
 
-  QPushButton* button = qobject_cast<QPushButton*>(this->Widget);
+  // Get last widget
+  QWidget* lastWidget = this->GUIWidgetsMap.last();
+
+  QPushButton* button = qobject_cast<QPushButton*>(lastWidget);
   if (button)
   {
     button->setText(d->NewLabelLineEdit->text());
@@ -118,4 +123,17 @@ void qSlicerGUIWidgetsModuleWidget::updateButtonLabelButtonClicked()
   {
     qCritical() << Q_FUNC_INFO << ": Widget is not a push button";
   }
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerGUIWidgetsModuleWidget::setWidgetToGUIWidgetMarkupsNode(vtkMRMLGUIWidgetNode* node, QWidget* widget)
+{
+  if (!node)
+  {
+    return;
+  }
+
+  node->SetWidget((void*)widget);
+
+  this->GUIWidgetsMap[node] = widget;
 }

@@ -28,13 +28,11 @@
 
 #include "qSlicerGUIWidgetsModuleExport.h"
 
-#include "vtkSlicerQWidgetWidget.h"
-
-// VTK includes
-#include <vtkSmartPointer.h>
+// Qt includes
+#include <QMap>
 
 class qSlicerGUIWidgetsModuleWidgetPrivate;
-class vtkMRMLNode;
+class vtkMRMLGUIWidgetNode;
 
 /// \ingroup Slicer_QtModules_ExtensionTemplate
 class Q_SLICER_QTMODULES_GUIWIDGETS_EXPORT qSlicerGUIWidgetsModuleWidget :
@@ -52,14 +50,16 @@ public slots:
   QWidget* addHelloWorldNodeClicked();
   void updateButtonLabelButtonClicked();
 
+  /// Assign widget to a GUIWidget markups node
+  void setWidgetToGUIWidgetMarkupsNode(vtkMRMLGUIWidgetNode* node, QWidget* widget);
+
 protected:
   QScopedPointer<qSlicerGUIWidgetsModuleWidgetPrivate> d_ptr;
 
   virtual void setup();
 
 protected:
-  vtkSmartPointer<vtkSlicerQWidgetWidget> SlicerQWidgetWidget;
-  QWidget* Widget;
+  QMap<vtkMRMLGUIWidgetNode*, QWidget*> GUIWidgetsMap;
 
 private:
   Q_DECLARE_PRIVATE(qSlicerGUIWidgetsModuleWidget);
