@@ -49,8 +49,8 @@ public:
   virtual ~qSlicerGUIWidgetsModuleWidget();
 
 public slots:
-  QWidget* addHelloWorldSlicerClicked();
-  void addHelloWorldNodeClicked();
+  QWidget* addHelloWorldNodeClicked();
+  void updateButtonLabelButtonClicked();
 
 protected:
   QScopedPointer<qSlicerGUIWidgetsModuleWidgetPrivate> d_ptr;

@@ -17,22 +17,29 @@
    <item>
     <widget class="ctkCollapsibleButton" name="CTKCollapsibleButton">
      <property name="text">
-      <string>Display</string>
+      <string>Test GUIWidget</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QPushButton" name="AddHelloWorldWidgetButton_Slicer">
-        <property name="text">
-         <string>Add Hello World Slicer VTK widget to 3D view</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QPushButton" name="AddHelloWorldGUIWidgetNodeButton">
         <property name="text">
          <string>Add Hello World GUI widget node</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLineEdit" name="NewLabelLineEdit"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="UpdateButtonLabelButton">
+          <property name="text">
+           <string>Update button label</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>

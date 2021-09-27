@@ -217,7 +217,7 @@ void vtkSlicerQWidgetRepresentation::UpdateFromMRML(vtkMRMLNode* caller, unsigne
     return;
   }
 
-  //if (event == vtkMRMLGUIWidgetNode::WidgetChangedEvent)
+  if (guiWidgetNode->GetWidget() != this->GetQWidgetTexture()->GetWidget())
   {
     if (guiWidgetNode->GetWidget() == nullptr)
     {

@@ -37,12 +37,6 @@ public:
   /// Print out the node information to the output stream
   void PrintSelf(ostream& os, vtkIndent indent) override;
 
-  /// WidgetChangedEvent is invoked when a new widget is set
-  enum
-  {
-    WidgetChangedEvent = 29000
-  };
-
   //TODO:
   //const char* GetIcon() override {return ":/Icons/MarkupsPlane.png";}
   //const char* GetAddIcon() override {return ":/Icons/MarkupsPlaneMouseModePlace.png";}

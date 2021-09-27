@@ -136,6 +136,5 @@ void vtkMRMLGUIWidgetNode::SetWidget(void* w)
   }
 
   this->Widget = w;
-  this->InvokeCustomModifiedEvent(vtkMRMLGUIWidgetNode::WidgetChangedEvent);
   this->Modified();
 }

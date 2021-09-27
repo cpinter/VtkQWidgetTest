@@ -86,42 +86,12 @@ void qSlicerGUIWidgetsModuleWidget::setup()
   d->setupUi(this);
   this->Superclass::setup();
 
-  QObject::connect(d->AddHelloWorldWidgetButton_Slicer, SIGNAL(clicked()), this, SLOT(addHelloWorldSlicerClicked()));
   QObject::connect(d->AddHelloWorldGUIWidgetNodeButton, SIGNAL(clicked()), this, SLOT(addHelloWorldNodeClicked()));
+  QObject::connect(d->UpdateButtonLabelButton, SIGNAL(clicked()), this, SLOT(updateButtonLabelButtonClicked()));
 }
 
 //-----------------------------------------------------------------------------
-QWidget* qSlicerGUIWidgetsModuleWidget::addHelloWorldSlicerClicked()
-{
-  Q_D(qSlicerGUIWidgetsModuleWidget);
-
-  qSlicerApplication* app = qSlicerApplication::application();
-  if (!app || !app->layoutManager())
-  {
-    qCritical() << Q_FUNC_INFO << ": Failed to access layout manager";
-  }
-  /*
-  this->Widget = new QPushButton("Hello world!");
-
-  this->SlicerQWidgetWidget = vtkSmartPointer<vtkSlicerQWidgetWidget>::New();
-  this->SlicerQWidgetWidget->SetWidget(this->Widget);
-
-  qMRMLLayoutManager* layoutManager = app->layoutManager();
-  qMRMLThreeDView* threeDView = layoutManager->threeDWidget(0)->threeDView();
-  vtkRenderer* activeRenderer = layoutManager->activeThreeDRenderer();
-  vtkMRMLViewNode* viewNode = threeDView->mrmlViewNode();
-  vtkMRMLGUIWidgetDisplayNode* displayNode = vtkMRMLGUIWidgetDisplayNode::SafeDownCast(
-    app->mrmlScene()->AddNewNodeByClass("vtkMRMLGUIWidgetDisplayNode") );
-  this->SlicerQWidgetWidget->CreateDefaultRepresentation(displayNode, viewNode, activeRenderer);
-
-  return this->Widget;
-  */
-  qCritical() << "Function addHelloWorldSlicerClicked not implemented anymore";
-  return nullptr;
-}
-
-//-----------------------------------------------------------------------------
-void qSlicerGUIWidgetsModuleWidget::addHelloWorldNodeClicked()
+QWidget* qSlicerGUIWidgetsModuleWidget::addHelloWorldNodeClicked()
 {
   qSlicerApplication* app = qSlicerApplication::application();
 
@@ -130,4 +100,22 @@ void qSlicerGUIWidgetsModuleWidget::addHelloWorldNodeClicked()
 
   this->Widget = new QPushButton("Hello world!");
   widgetNode->SetWidget((void*)this->Widget);
+
+  return this->Widget;
+}
+
+//-----------------------------------------------------------------------------
+void qSlicerGUIWidgetsModuleWidget::updateButtonLabelButtonClicked()
+{
+  Q_D(qSlicerGUIWidgetsModuleWidget);
+
+  QPushButton* button = qobject_cast<QPushButton*>(this->Widget);
+  if (button)
+  {
+    button->setText(d->NewLabelLineEdit->text());
+  }
+  else
+  {
+    qCritical() << Q_FUNC_INFO << ": Widget is not a push button";
+  }
 }
