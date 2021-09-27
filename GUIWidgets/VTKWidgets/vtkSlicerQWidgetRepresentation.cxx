@@ -268,4 +268,7 @@ void vtkSlicerQWidgetRepresentation::OnTextureModified(
     -(double)(rect.height()/2)*self->SpacingMmPerPixel, (double)rect.height()/2*self->SpacingMmPerPixel
   };
   self->PlaceWidget(bounds);
+
+  // Trigger rendering in view
+  self->GetViewNode()->Modified();
 }
