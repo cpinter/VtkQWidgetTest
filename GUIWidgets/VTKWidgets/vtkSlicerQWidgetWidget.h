@@ -40,7 +40,6 @@
 // Qt includes
 #include <QPointF>
 
-class QWidget;
 class vtkSlicerQWidgetRepresentation;
 
 class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetWidget : public vtkSlicerMarkupsWidget
@@ -77,9 +76,6 @@ public:
   void CreateDefaultRepresentation(
     vtkMRMLMarkupsDisplayNode* markupsDisplayNode, vtkMRMLAbstractViewNode* viewNode, vtkRenderer* renderer) override;
 
-  /// Set the QWidget that will receive the events.
-  void SetWidget(QWidget* w);
-
 protected:
   vtkSlicerQWidgetWidget();
   ~vtkSlicerQWidgetWidget() override;
@@ -92,7 +88,6 @@ protected:
     Active
   };
   */
-  QWidget* Widget;
   QPointF LastWidgetCoordinates;
 
   // These methods handle events

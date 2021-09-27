@@ -100,7 +100,7 @@ QWidget* qSlicerGUIWidgetsModuleWidget::addHelloWorldSlicerClicked()
   {
     qCritical() << Q_FUNC_INFO << ": Failed to access layout manager";
   }
-
+  /*
   this->Widget = new QPushButton("Hello world!");
 
   this->SlicerQWidgetWidget = vtkSmartPointer<vtkSlicerQWidgetWidget>::New();
@@ -115,6 +115,9 @@ QWidget* qSlicerGUIWidgetsModuleWidget::addHelloWorldSlicerClicked()
   this->SlicerQWidgetWidget->CreateDefaultRepresentation(displayNode, viewNode, activeRenderer);
 
   return this->Widget;
+  */
+  qCritical() << "Function addHelloWorldSlicerClicked not implemented anymore";
+  return nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -126,5 +129,5 @@ void qSlicerGUIWidgetsModuleWidget::addHelloWorldNodeClicked()
     app->mrmlScene()->AddNewNodeByClass("vtkMRMLGUIWidgetNode") );
 
   this->Widget = new QPushButton("Hello world!");
-  // widgetNode->SetWidget(this->Widget); //TODO: Doesn't link. Including QT stuff in target libraries doesn't help
+  widgetNode->SetWidget((void*)this->Widget);
 }

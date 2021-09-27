@@ -28,9 +28,6 @@
 // Markups includes
 #include "vtkMRMLMarkupsPlaneNode.h"
 
-// Qt includes //TODO: Maybe set the widget to the module instance and have handles here
-class QWidget;
-
 /// \brief MRML node to represent a planar GUI widget displayable in the 3D view
 class  VTK_SLICER_GUIWIDGETS_MODULE_MRML_EXPORT vtkMRMLGUIWidgetNode : public vtkMRMLMarkupsPlaneNode
 {
@@ -40,6 +37,13 @@ public:
   /// Print out the node information to the output stream
   void PrintSelf(ostream& os, vtkIndent indent) override;
 
+  /// WidgetChangedEvent is invoked when a new widget is set
+  enum
+  {
+    WidgetChangedEvent = 29000
+  };
+
+  //TODO:
   //const char* GetIcon() override {return ":/Icons/MarkupsPlane.png";}
   //const char* GetAddIcon() override {return ":/Icons/MarkupsPlaneMouseModePlace.png";}
   //const char* GetPlaceAddIcon() override {return ":/Icons/MarkupsPlaneMouseModePlaceAdd.png";}
@@ -68,13 +72,14 @@ public:
   void CreateDefaultDisplayNodes() override;
 
 public:
-  /// Set the QWidget that will receive the events.
-  void SetWidget(QWidget* w);
-  /// Get the QWidget
-  QWidget* GetWidget() { return this->Widget; };
+  /// Set the handle (must contain a QWidget) that will receive the events.
+  void SetWidget(void* w);
+  /// Get the QWidget handle
+  void* GetWidget() { return this->Widget; };
 
 protected:
-  QWidget* Widget{nullptr};
+  /// Handle for the widget to be rendered in the GUI widget markup
+  void* Widget{nullptr};
 
 protected:
   vtkMRMLGUIWidgetNode();

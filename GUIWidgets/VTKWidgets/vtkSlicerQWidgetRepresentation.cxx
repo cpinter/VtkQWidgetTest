@@ -217,11 +217,21 @@ void vtkSlicerQWidgetRepresentation::UpdateFromMRML(vtkMRMLNode* caller, unsigne
     return;
   }
 
-  //TODO: Reinstate if figured out how widget can be set from outside
-  //if (guiWidgetNode->GetWidget() != this->QWidgetTexture->GetWidget())
-  //{
-  //  this->QWidgetTexture->SetWidget(guiWidgetNode->GetWidget());
-  //}
+  //if (event == vtkMRMLGUIWidgetNode::WidgetChangedEvent)
+  {
+    if (guiWidgetNode->GetWidget() == nullptr)
+    {
+      this->QWidgetTexture->SetWidget(nullptr);
+    }
+    else
+    {
+      QWidget* widget = reinterpret_cast<QWidget*>(guiWidgetNode->GetWidget());
+      if (widget != this->QWidgetTexture->GetWidget())
+      {
+        this->QWidgetTexture->SetWidget(widget);
+      }
+    }
+  }
 
   if (!this->QWidgetTexture->GetWidget() || !this->ViewNode)
   {

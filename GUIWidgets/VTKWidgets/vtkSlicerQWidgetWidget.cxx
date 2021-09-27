@@ -56,7 +56,6 @@ vtkStandardNewMacro(vtkSlicerQWidgetWidget);
 //------------------------------------------------------------------------------
 vtkSlicerQWidgetWidget::vtkSlicerQWidgetWidget()
 {
-  this->Widget = nullptr;
 }
 
 //------------------------------------------------------------------------------
@@ -84,22 +83,6 @@ vtkSlicerMarkupsWidget* vtkSlicerQWidgetWidget::CreateInstance()const
   return result;
 }
 
-//------------------------------------------------------------------------------
-void vtkSlicerQWidgetWidget::SetWidget(QWidget* w)
-{
-  if (this->Widget == w)
-  {
-    return;
-  }
-  this->Widget = w;
-
-  if (this->GetQWidgetRepresentation())
-  {
-    this->GetQWidgetRepresentation()->SetWidget(this->Widget);
-  }
-  this->Modified();
-}
-
 //----------------------------------------------------------------------
 void vtkSlicerQWidgetWidget::CreateDefaultRepresentation(
   vtkMRMLMarkupsDisplayNode* markupsDisplayNode, vtkMRMLAbstractViewNode* viewNode, vtkRenderer* renderer)
@@ -116,22 +99,6 @@ void vtkSlicerQWidgetWidget::CreateDefaultRepresentation(
   rep->SetMarkupsDisplayNode(markupsDisplayNode);
   rep->SetViewNode(viewNode);
 
-  // Set widget from markups node when creating the representation
-  vtkMRMLGUIWidgetNode* guiWidgetNode = vtkMRMLGUIWidgetNode::SafeDownCast(markupsDisplayNode->GetDisplayableNode());
-  if (guiWidgetNode)
-  {
-    if (guiWidgetNode->GetWidget())
-    {
-      this->SetWidget(guiWidgetNode->GetWidget());
-    }
-    else
-    {
-      QPushButton* defaultWidget = new QPushButton("Hello world!");
-      this->SetWidget(defaultWidget);
-    }
-  }
-  rep->SetWidget(this->Widget); //TODO: Not needed (unless Modified maybe?), the widget comes from elsewhere
-
   rep->UpdateFromMRML(nullptr, 0); // full update
 }
 
@@ -141,11 +108,7 @@ void vtkSlicerQWidgetWidget::SetRepresentation(vtkMRMLAbstractWidgetRepresentati
   this->Superclass::SetRepresentation(rep);
 
   vtkSlicerQWidgetRepresentation* qWidgetRep = vtkSlicerQWidgetRepresentation::SafeDownCast(rep);
-  if (qWidgetRep)
-  {
-    qWidgetRep->SetWidget(this->Widget);
-  }
-  else
+  if (!qWidgetRep)
   {
     vtkErrorMacro("SetRepresentation: Given representation is not a vtkSlicerQWidgetRepresentation");
   }

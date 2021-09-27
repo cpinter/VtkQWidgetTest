@@ -126,3 +126,16 @@ void vtkMRMLGUIWidgetNode::CreateDefaultDisplayNodes()
   }
   this->SetAndObserveDisplayNodeID(displayNode->GetID());
 }
+
+//----------------------------------------------------------------------------
+void vtkMRMLGUIWidgetNode::SetWidget(void* w)
+{
+  if (this->Widget == w)
+  {
+    return;
+  }
+
+  this->Widget = w;
+  this->InvokeCustomModifiedEvent(vtkMRMLGUIWidgetNode::WidgetChangedEvent);
+  this->Modified();
+}
