@@ -35,7 +35,7 @@
 
 #include "vtkSlicerGUIWidgetsModuleVTKWidgetsExport.h"
 
-#include "vtkSlicerMarkupsWidgetRepresentation3D.h"
+#include "vtkSlicerPlaneRepresentation3D.h"
 
 class QWidget;
 
@@ -47,7 +47,7 @@ class vtkPolyDataAlgorithm;
 class vtkPolyDataMapper;
 class vtkSlicerQWidgetTexture;
 
-class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetRepresentation : public vtkSlicerMarkupsWidgetRepresentation3D
+class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetRepresentation : public vtkSlicerPlaneRepresentation3D
 {
 public:
   /**
@@ -57,7 +57,7 @@ public:
 
   ///@{
   /// Standard methods for the class.
-  vtkTypeMacro(vtkSlicerQWidgetRepresentation, vtkSlicerMarkupsWidgetRepresentation3D);
+  vtkTypeMacro(vtkSlicerQWidgetRepresentation, vtkSlicerPlaneRepresentation3D);
   void PrintSelf(ostream& os, vtkIndent indent) override;
   ///@}
 
@@ -94,7 +94,7 @@ public:
 
   /// Get the vtkPlaneSouce used by this representation. This can be useful
   /// to set the Origin, Point1, Point2 of the plane source directly.
-  vtkGetObjectMacro(PlaneSource, vtkPlaneSource);
+  //vtkGetObjectMacro(PlaneSource, vtkPlaneSource);
 
   /// Get the widget coordinates as computed in the last call to
   /// ComputeComplexInteractionState.
@@ -113,9 +113,9 @@ protected:
   //int WidgetCoordinates[2];
   double SpacingMmPerPixel{0.5};
 
-  vtkPlaneSource* PlaneSource;
-  vtkPolyDataMapper* PlaneMapper;
-  vtkActor* PlaneActor;
+  //vtkPlaneSource* PlaneSource;
+  //vtkPolyDataMapper* PlaneMapper;
+  //vtkActor* PlaneActor;
   vtkOpenGLTexture* PlaneTexture;
   vtkSlicerQWidgetTexture* QWidgetTexture;
   vtkCallbackCommand* TextureCallbackCommand;

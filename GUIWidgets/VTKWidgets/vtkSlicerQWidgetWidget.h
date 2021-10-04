@@ -35,14 +35,14 @@
 
 #include "vtkSlicerGUIWidgetsModuleVTKWidgetsExport.h"
 
-#include "vtkSlicerMarkupsWidget.h"
+#include "vtkSlicerPlaneWidget.h"
 
 // Qt includes
 #include <QPointF>
 
 class vtkSlicerQWidgetRepresentation;
 
-class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetWidget : public vtkSlicerMarkupsWidget
+class VTK_SLICER_GUIWIDGETS_MODULE_VTKWIDGETS_EXPORT vtkSlicerQWidgetWidget : public vtkSlicerPlaneWidget
 {
   friend class vtkInteractionCallback;
 
@@ -52,12 +52,12 @@ public:
 
   ///@{
   /// Standard vtkObject methods
-  vtkTypeMacro(vtkSlicerQWidgetWidget, vtkSlicerMarkupsWidget);
+  vtkTypeMacro(vtkSlicerQWidgetWidget, vtkSlicerPlaneWidget);
   void PrintSelf(ostream& os, vtkIndent indent) override;
   ///@}
 
   /// Create instance of the markups widget
-  vtkSlicerMarkupsWidget* CreateInstance() const override;
+  vtkSlicerPlaneWidget* CreateInstance() const override;
 
   /// Specify an instance of vtkSlicerQWidgetRepresentation used to represent this
   /// widget in the scene. Note that the representation is a subclass of vtkProp

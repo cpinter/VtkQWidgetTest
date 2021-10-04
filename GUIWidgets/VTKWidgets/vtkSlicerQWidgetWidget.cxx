@@ -68,7 +68,7 @@ vtkSlicerQWidgetRepresentation* vtkSlicerQWidgetWidget::GetQWidgetRepresentation
 }
 
 //------------------------------------------------------------------------------
-vtkSlicerMarkupsWidget* vtkSlicerQWidgetWidget::CreateInstance()const
+vtkSlicerPlaneWidget* vtkSlicerQWidgetWidget::CreateInstance()const
 {
   vtkObject* ret = vtkObjectFactory::CreateInstance("vtkSlicerQWidgetWidget");
   if(ret)
